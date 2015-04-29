@@ -29,7 +29,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
     <link rel="stylesheet" href="Styles/Main.css"></link>
     <link rel="stylesheet" href="Styles/QueueView.css"></link>
-    <link rel="stylesheet" href="Styles/Metrics.css"></link>
+    <link rel="stylesheet" href="Styles/Pipeline.css"></link>
     <link rel="stylesheet" href="External/daterangepicker.css"></link>
 
     <script src="Scripts/Utilities.js"></script>
@@ -54,244 +54,58 @@ THE POSSIBILITY OF SUCH DAMAGE.
 </head>
 <body>
 
+<h1>Patch Processing Pipelines by Queue</h1>
+
+<div class="main">
+
+<table class="queue-pipelines">
+<thead>
+<tr>
+<td class="queue-label">Queue</td>
+<td class="queue-diagram">Results by Attempt</td>
+</thead>
+
+<tbody>
+<tr><td class="queue-label">ios</td>
+<td class="queue-diagram">
+
+<div class="diagram">
+<div class="tile queue">
+<span class="tile-label">Queue</span>
+<span class="arrow-continue"></span>
+</div>
+<div class="tile attempt">
+<span class="tile-label">Attempt 1</span>
+<span class="arrow-continue"></span>
+</div>
+<div class="tile attempt">
+<span class="tile-label">Attempt 2</span>
+<span class="arrow-continue"></span>
+</div>
+</div>
+
+</td></tr>
+
+<tr><td class="queue-label">mac</td>
+<td class="queue-diagram">Placeholder</td></tr>
+
+<tr><td class="queue-label">mac-wk2</td>
+<td class="queue-diagram">Placeholder</td></tr>
+
+<tr><td class="queue-label">win</td>
+<td class="queue-diagram">Placeholder</td></tr>
+
+</tbody>
+</table>
+
+</div>
+
 <script>
+// For now, just work with static HTML and CSS. Once this looks
+// acceptable, build it up from fake model objects, then hook up to
+// real data, then make the date range configurable.
 
-var hasBubbles = typeof bubbleQueueServer != "undefined";
-
-var analyzer = new Analyzer;
-
-var allBuilderResultsPseudoQueue = { id: "allBuilderResultsPseudoQueue" };
-var allResultsPseudoQueue = { id: "allResultsPseudoQueue" };
-
-var categorizedQueuesByPlatformAndBuildType = {};
-
-for (var i = 0; i < buildbots.length; ++i) {
-    var buildbot = buildbots[i];
-    for (var id in buildbot.queues) {
-        var queue = buildbot.queues[id];
-        var platform = categorizedQueuesByPlatformAndBuildType[queue.platform];
-        if (!platform)
-            platform = categorizedQueuesByPlatformAndBuildType[queue.platform] = {};
-        if (!platform.builders)
-            platform.builders = {};
-
-        var categoryName;
-        if (queue.builder)
-            categoryName = "builders";
-        else if (queue.tester)
-            categoryName = queue.testCategory;
-        else {
-            console.assert("Unknown queue type.");
-            continue;
-        }
-
-        category = platform[categoryName];
-        if (!category)
-            category = platform[categoryName] = {};
-
-        var buildType = queue.debug ? "debug" : "release";
-
-        buildQueues = category[buildType];
-        if (!buildQueues)
-            buildQueues = category[buildType] = [];
-
-        buildQueues.push(queue);
-    }
-}
-
-var testNames = {};
-testNames[Buildbot.TestCategory.WebKit2] = "WK2 Tests";
-testNames[Buildbot.TestCategory.WebKit1] = "WK1 Tests";
-
-function sortedPlatforms()
-{
-    var platforms = [];
-
-    for (var platformKey in Dashboard.Platform)
-        platforms.push(Dashboard.Platform[platformKey]);
-
-    platforms.sort(function(a, b) {
-        return a.order - b.order;
-    });
-
-    return platforms;
-}
-
-function updateHiddenPlatforms()
-{
-    var hiddenPlatforms = settings.getObject("hiddenPlatforms");
-    if (!hiddenPlatforms)
-        hiddenPlatforms = [];
-
-    var platformRows = document.querySelectorAll("tr.platform");
-    for (var i = 0; i < platformRows.length; ++i)
-        platformRows[i].classList.remove("hidden");
-
-    for (var i = 0; i < hiddenPlatforms.length; ++i) {
-        var platformRow = document.querySelector("tr.platform." + hiddenPlatforms[i]);
-        if (platformRow)
-            platformRow.classList.add("hidden");
-    }
-
-    var unhideButton = document.querySelector("div.cellButton.unhide");
-    if (hiddenPlatforms.length)
-        unhideButton.classList.remove("hidden");
-    else
-        unhideButton.classList.add("hidden");
-}
-
-function unhiddenQueues()
-{
-    var hiddenPlatforms = settings.getObject("hiddenPlatforms");
-    if (!hiddenPlatforms)
-        hiddenPlatforms = [];
-
-    var result = [];
-
-    for (var i = 0; i < buildbots.length; ++i) {
-        var buildbot = buildbots[i];
-        for (var id in buildbot.queues) {
-            var queue = buildbot.queues[id];
-            if (-1 === hiddenPlatforms.indexOf(queue.platform))
-                result.push(queue);
-        }
-    }
-
-    return result;
-}
-
-function allQueues(category)
-{
-    var result = [];
-    if (category["debug"])
-        result = result.concat(category["debug"]);
-    if (category["release"])
-        result = result.concat(category["release"]);
-    return result;
-}
-
-function buildAggregateTable()
-{
-    var table = document.createElement("table");
-    table.classList.add("queue-grid");
-    table.classList.add("aggregate-grid");
-
-    var row = document.createElement("tr");
-    row.classList.add("headers");
-
-    header = document.createElement("th");
-    header.textContent = "Builders";
-    row.appendChild(header);
-
-    header = document.createElement("th");
-    header.textContent = "All queues";
-    row.appendChild(header);
-
-    table.appendChild(row);
-
-    var row = document.createElement("tr");
-
-    cell = document.createElement("td");
-
-    var view = new MetricsView(analyzer, [allBuilderResultsPseudoQueue]);
-    cell.appendChild(view.element);
-    row.appendChild(cell);
-
-    cell = document.createElement("td");
-
-    var view = new MetricsView(analyzer, [allResultsPseudoQueue]);
-    cell.appendChild(view.element);
-    row.appendChild(cell);
-
-    table.appendChild(row);
-
-    document.body.appendChild(table);
-}
-
-function buildBubbleQueuesTable()
-{
-    var table = document.createElement("table");
-    table.classList.add("queue-grid");
-
-    var row = document.createElement("tr");
-    row.classList.add("headers");
-
-    for (id in bubbleQueueServer.queues) {
-        var header = document.createElement("th");
-        header.textContent = bubbleQueueServer.queues[id].shortName;
-        row.appendChild(header);
-    }
-
-    table.appendChild(row);
-
-    row = document.createElement("tr");
-    row.classList.add("platform");
-
-    for (id in bubbleQueueServer.queues) {
-        var cell = document.createElement("td");
-        var view = new MetricsBubbleView(analyzer, bubbleQueueServer.queues[id]);
-        cell.appendChild(view.element);
-        row.appendChild(cell);
-    }
-
-    table.appendChild(row);
-
-    document.body.appendChild(table);
-
-    return table;
-}
-
-function documentReady()
-{
-    var rangePicker = document.createElement("span");
-    rangePicker.id = "range-picker";
-    rangePicker.size = 40;
-    rangePicker.textContent = "Please select a date range";
-    document.body.appendChild(rangePicker);
-    $("#range-picker").dateRangePicker({
-        startOfWeek: navigator.language === "en-us" ? "sunday" : "monday",
-        endDate: new Date(),
-        showShortcuts: false,
-        getValue: function() { return this.textContent; },
-        setValue: function(s) { this.textContent = s; }
-    })
-    .bind('datepicker-apply',function(event,obj)
-    {
-        // This message is dispatched even when range hasn't been selected (or only one endpoint was),
-        // in which case the actual range hasn't changed, and there is nothing to do.
-        if (isNaN(obj.date1) || isNaN(obj.date2))
-            return;
-
-        var endDate = new Date(new Date(obj.date2).setDate(obj.date2.getDate() + 1));
-
-        // FIXME: Support performance bots.
-        var queues = unhiddenQueues().filter(function(queue) { return queue.builder || queue.tester; });
-        analyzer.analyze(queues, obj.date1, endDate);
-    });
-
-    var loadingIndicator = document.createElement("div");
-    loadingIndicator.classList.add("metrics-loading-indicator");
-    loadingIndicator.textContent = "Loading (first load takes several minutes)\u2026";
-    document.body.appendChild(loadingIndicator);
-
-    analyzer.addEventListener(Analyzer.Event.Starting, function() {
-        loadingIndicator.style.visibility = "visible";
-    }, this);
-    analyzer.addEventListener(Analyzer.Event.Finished, function() {
-        loadingIndicator.style.visibility = "hidden";
-        loadingIndicator.textContent = "Loading\u2026"; // Remove the first time warning now.
-    }, this);
-
-    buildAggregateTable();
-    if (hasBubbles) {
-        var tablesDivider = document.createElement("div");
-        tablesDivider.classList.add("tables-divider");
-        document.body.appendChild(tablesDivider);
-        buildBubbleQueuesTable();
-    }
-}
-
-document.addEventListener("DOMContentLoaded", documentReady);
+//document.addEventListener("DOMContentLoaded", documentReady);
 </script>
 
 </body>
