@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1000px" height="316px" viewBox="0 0 1000 316" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.1 (12005) - http://www.bohemiancoding.com/sketch -->
+    <title>Statistics and Histograms</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Statistics-and-Histograms" sketch:type="MSArtboardGroup">
+            <text id="Time-to-Pass" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="20" font-weight="420" fill="#4A4A4A">
+                <tspan x="102" y="64">Time to Pass</tspan>
+            </text>
+            <text id="Time-to-Fail" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="20" font-weight="420" fill="#4A4A4A">
+                <tspan x="330" y="64">Time to Fail</tspan>
+            </text>
+            <path d="M79.4977301,88 L902.002441,88" id="Horizonal-Rule-Copy" stroke="#979797" stroke-width="2" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+            <text id="Time-to-Retry" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="20" font-weight="420" fill="#4A4A4A">
+                <tspan x="569" y="64">Time to Retry</tspan>
+            </text>
+            <text id="Time-to-Abort" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="20" font-weight="420" fill="#4A4A4A">
+                <tspan x="789" y="64">Time to Abort</tspan>
+            </text>
+            <path d="M76,117.5 L76,161.111555 C76,164.57437 76,171.5 76,171.5 L253,171.5" id="Path-47" stroke="#4A4A4A" stroke-width="1.5" sketch:type="MSShapeGroup"></path>
+            <rect id="Rectangle-16" fill="#9B9B9B" sketch:type="MSShapeGroup" x="77.8548387" y="119.5" width="7.13709677" height="50"></rect>
+            <rect id="Rectangle-16-Copy" fill="#9B9B9B" sketch:type="MSShapeGroup" x="86.4193548" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-2" fill="#9B9B9B" sketch:type="MSShapeGroup" x="94.983871" y="143.5" width="7.13709677" height="26"></rect>
+            <rect id="Rectangle-16-Copy-3" fill="#9B9B9B" sketch:type="MSShapeGroup" x="103.548387" y="148.5" width="7.13709677" height="21"></rect>
+            <rect id="Rectangle-16-Copy-4" fill="#9B9B9B" sketch:type="MSShapeGroup" x="112.112903" y="152.5" width="7.13709677" height="17"></rect>
+            <rect id="Rectangle-16-Copy-5" fill="#9B9B9B" sketch:type="MSShapeGroup" x="120.677419" y="158.5" width="7.13709677" height="11"></rect>
+            <rect id="Rectangle-16-Copy-6" fill="#9B9B9B" sketch:type="MSShapeGroup" x="129.241935" y="163.5" width="7.13709677" height="6"></rect>
+            <rect id="Rectangle-16-Copy-7" fill="#9B9B9B" sketch:type="MSShapeGroup" x="137.806452" y="163.5" width="7.13709677" height="6"></rect>
+            <rect id="Rectangle-16-Copy-8" fill="#9B9B9B" sketch:type="MSShapeGroup" x="146.370968" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-9" fill="#9B9B9B" sketch:type="MSShapeGroup" x="154.935484" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-19" fill="#6E27AC" sketch:type="MSShapeGroup" x="163.5" y="119.5" width="7.13709677" height="50"></rect>
+            <rect id="Rectangle-16-Copy-18" fill="#9B9B9B" sketch:type="MSShapeGroup" x="172.064516" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-17" fill="#9B9B9B" sketch:type="MSShapeGroup" x="180.629032" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-16" fill="#9B9B9B" sketch:type="MSShapeGroup" x="189.193548" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-15" fill="#9B9B9B" sketch:type="MSShapeGroup" x="197.758065" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-14" fill="#9B9B9B" sketch:type="MSShapeGroup" x="206.322581" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-13" fill="#9B9B9B" sketch:type="MSShapeGroup" x="214.887097" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-12" fill="#9B9B9B" sketch:type="MSShapeGroup" x="223.451613" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-11" fill="#9B9B9B" sketch:type="MSShapeGroup" x="232.016129" y="137.5" width="7.13709677" height="32"></rect>
+            <rect id="Rectangle-16-Copy-10" fill="#9B9B9B" sketch:type="MSShapeGroup" x="240.580645" y="137.5" width="7.13709677" height="32"></rect>
+            <path d="M166.96501,113 L166.96501,119 L170.637097,119 L163.5,119" id="Path-48" stroke="#9B9B9B" stroke-width="1.5" opacity="0.569671175" sketch:type="MSShapeGroup" transform="translate(167.068548, 116.000000) scale(1, -1) translate(-167.068548, -116.000000) "></path>
+            <text id="≤5s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="70.5040323" y="183">≤5s</tspan>
+            </text>
+            <text id="30s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="112.504032" y="183">30s</tspan>
+            </text>
+            <text id="5%" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="53.5040323" y="150.5">5%</tspan>
+            </text>
+            <text id="1m" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="156.504032" y="183">1m</tspan>
+            </text>
+            <text id="1m-30s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="191.504032" y="183">1m 30s</tspan>
+            </text>
+            <path d="M77.4927631,172.216253 L77.4927631,175.5" id="Path-49" stroke="#979797" sketch:type="MSShapeGroup"></path>
+            <path d="M119.492763,172.216253 L119.492763,175.5" id="Path-49-Copy" stroke="#979797" sketch:type="MSShapeGroup"></path>
+            <path d="M162.492763,172.216253 L162.492763,175.5" id="Path-49-Copy-2" stroke="#979797" sketch:type="MSShapeGroup"></path>
+            <path d="M205.492763,172.216253 L205.492763,175.5" id="Path-49-Copy-3" stroke="#979797" sketch:type="MSShapeGroup"></path>
+            <text id="2m" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="8" font-weight="420" fill="#4A4A4A">
+                <tspan x="242.504032" y="183">2m</tspan>
+            </text>
+            <path d="M248.492763,172.216253 L248.492763,175.5" id="Path-49-Copy-4" stroke="#979797" sketch:type="MSShapeGroup"></path>
+            <path d="M71.5,147.5 L253.510986,147.5" id="Line" stroke="#979797" stroke-linecap="square" opacity="0.223064366" sketch:type="MSShapeGroup"></path>
+            <text id="Median" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="18" font-weight="420" fill="#4A4A4A">
+                <tspan x="77" y="221">Median</tspan>
+            </text>
+            <text id="Average" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="18" font-weight="420" fill="#4A4A4A">
+                <tspan x="77" y="251">Average</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

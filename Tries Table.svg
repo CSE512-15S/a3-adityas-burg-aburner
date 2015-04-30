@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1000px" height="271px" viewBox="0 0 1000 271" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.1 (12005) - http://www.bohemiancoding.com/sketch -->
+    <title>Tries Table</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Tries-Table" sketch:type="MSArtboardGroup">
+            <text id="Patch" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="174" y="49">Patch</tspan>
+            </text>
+            <text id="Result" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="102" y="49">Result</tspan>
+            </text>
+            <text id="Try" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="65.2" y="49">Try</tspan>
+            </text>
+            <text id="Start" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="241" y="49">Start</tspan>
+            </text>
+            <text id="Duration" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="338" y="49">Duration</tspan>
+            </text>
+            <rect id="Rectangle-15" fill="#D8CCDC" sketch:type="MSShapeGroup" x="50" y="176.1" width="824" height="21"></rect>
+            <text id="Bug-Description" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="519" y="50">Bug Description</tspan>
+            </text>
+            <text id="Author" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#4A4A4A">
+                <tspan x="420" y="49">Author</tspan>
+            </text>
+            <text id="252067" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="85">252067</tspan>
+            </text>
+            <g id="Arrow-Retry-Detail" sketch:type="MSLayerGroup" transform="translate(102.000000, 75.250000)" stroke="#4990E2">
+                <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" id="Path-5-Copy" fill="#4990E2" sketch:type="MSShapeGroup" transform="translate(34.881407, 5.987388) rotate(91.000000) translate(-34.881407, -5.987388) "></path>
+                <path d="M1.39796145,6 L31.5973985,6" id="Path-7" stroke-width="4" sketch:type="MSShapeGroup"></path>
+            </g>
+            <g id="Arrow-Retry-Detail-Copy" sketch:type="MSLayerGroup" transform="translate(102.000000, 140.250000)" stroke="#4990E2">
+                <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" id="Path-5-Copy" fill="#4990E2" sketch:type="MSShapeGroup" transform="translate(34.881407, 5.987388) rotate(91.000000) translate(-34.881407, -5.987388) "></path>
+                <path d="M1.39796145,6 L31.5973985,6" id="Path-7" stroke-width="4" sketch:type="MSShapeGroup"></path>
+            </g>
+            <g id="Arrow-Retry-Detail-Copy-2" sketch:type="MSLayerGroup" transform="translate(102.000000, 221.250000)" stroke="#4990E2">
+                <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" id="Path-5-Copy" fill="#4990E2" sketch:type="MSShapeGroup" transform="translate(34.881407, 5.987388) rotate(91.000000) translate(-34.881407, -5.987388) "></path>
+                <path d="M1.39796145,6 L31.5973985,6" id="Path-7" stroke-width="4" sketch:type="MSShapeGroup"></path>
+            </g>
+            <text id="1h-30s-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="85">1h 30s ago</tspan>
+            </text>
+            <text id="30m-10s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="85">30m 10s</tspan>
+            </text>
+            <text id="agomez" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="85">agomez</tspan>
+            </text>
+            <text id="141173:-[GTK]-Web-In" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="86">141173: [GTK] Web Inspector: New Images for Object…</tspan>
+            </text>
+            <text id="252062" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="128">252062</tspan>
+            </text>
+            <text id="2h-3m-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="128">2h 3m ago</tspan>
+            </text>
+            <text id="3m-51s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="128">3m 51s</tspan>
+            </text>
+            <text id="beidson" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="128">beidson</tspan>
+            </text>
+            <text id="144269:-Add-a-new-Na" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="129">144269: Add a new NavigationType for meta refresh.</tspan>
+            </text>
+            <text id="252023" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="149">252023</tspan>
+            </text>
+            <text id="14h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="149">14h ago</tspan>
+            </text>
+            <text id="30s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="149">30s</tspan>
+            </text>
+            <text id="smfr" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="149">smfr</tspan>
+            </text>
+            <text id="144428:-Fixed-elemen" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="150">144428: Fixed element end up in the middle of the vie...</tspan>
+            </text>
+            <text id="14h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="169">14h ago</tspan>
+            </text>
+            <text id="25s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="169">25s</tspan>
+            </text>
+            <text id="251972" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="190">251972</tspan>
+            </text>
+            <text id="1d-2h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="190">1d 2h ago</tspan>
+            </text>
+            <text id="12m-3s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="190">12m 3s</tspan>
+            </text>
+            <text id="fpizlo" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="190">fpizlo</tspan>
+            </text>
+            <text id="144397:-JSTypeInfo-s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="191">144397: JSTypeInfo should have an inline type flag to…</tspan>
+            </text>
+            <text id="251981" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="211">251981</tspan>
+            </text>
+            <text id="1d-3h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="211">1d 3h ago</tspan>
+            </text>
+            <text id="5m-8s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="211">5m 8s</tspan>
+            </text>
+            <text id="zalan" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="211">zalan</tspan>
+            </text>
+            <text id="144403:-Simple-line-" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="212">144403: Simple line layout: Web process spins endles…</tspan>
+            </text>
+            <text id="252067" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="171" y="231">252067</tspan>
+            </text>
+            <text id="1d-5h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="231">1d 5h ago</tspan>
+            </text>
+            <text id="18m-33s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="231">18m 33s</tspan>
+            </text>
+            <text id="fpizlo" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="420" y="231">fpizlo</tspan>
+            </text>
+            <text id="144409:-DFG-Is&lt;Blah&gt;" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="normal" text-decoration="underline" fill="#4A90E2">
+                <tspan x="519" y="232">144409: DFG Is&lt;Blah&gt; versions of TypeOf should fold…</tspan>
+            </text>
+            <text id="1d-4h-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="251">1d 4h ago</tspan>
+            </text>
+            <text id="19m" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="251">19m</tspan>
+            </text>
+            <path d="M49.4977301,62 L872.002441,62" id="Horizonal-Rule" stroke="#979797" stroke-width="2" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+            <text id="50m-3s-ago" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="242" y="107">50m 3s ago</tspan>
+            </text>
+            <text id="25m-33s" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#4A4A4A">
+                <tspan x="339" y="107">25m 33s</tspan>
+            </text>
+            <g id="--copy-+---copy-4-+---copy-3" sketch:type="MSLayerGroup" transform="translate(442.000000, 95.000000)" font-size="14" font-family="Helvetica Neue" fill="#9B9B9B" font-weight="normal">
+                <text id="--copy" sketch:type="MSTextLayer">
+                    <tspan x="0" y="76">-</tspan>
+                </text>
+                <text id="--copy-4" sketch:type="MSTextLayer">
+                    <tspan x="0" y="13">-</tspan>
+                </text>
+                <text id="--copy-3" sketch:type="MSTextLayer">
+                    <tspan x="0" y="157">-</tspan>
+                </text>
+            </g>
+            <g id="--copy-+---copy-4-+---copy-3-copy" sketch:type="MSLayerGroup" transform="translate(192.000000, 95.000000)" font-size="14" font-family="Helvetica Neue" fill="#9B9B9B" font-weight="normal">
+                <text id="--copy" sketch:type="MSTextLayer">
+                    <tspan x="0" y="76">-</tspan>
+                </text>
+                <text id="--copy-4" sketch:type="MSTextLayer">
+                    <tspan x="0" y="13">-</tspan>
+                </text>
+                <text id="--copy-3" sketch:type="MSTextLayer">
+                    <tspan x="0" y="157">-</tspan>
+                </text>
+            </g>
+            <g id="--copy-7-+---copy-6-+---copy-5" sketch:type="MSLayerGroup" transform="translate(693.000000, 95.000000)" font-size="14" font-family="Helvetica Neue" fill="#9B9B9B" font-weight="normal">
+                <text id="--copy-7" sketch:type="MSTextLayer">
+                    <tspan x="0" y="76">-</tspan>
+                </text>
+                <text id="--copy-6" sketch:type="MSTextLayer">
+                    <tspan x="0" y="13">-</tspan>
+                </text>
+                <text id="--copy-5" sketch:type="MSTextLayer">
+                    <tspan x="0" y="157">-</tspan>
+                </text>
+            </g>
+            <g id="Terminal-Fail-Detail" sketch:type="MSLayerGroup" transform="translate(103.000000, 95.000000)" stroke="#830010" stroke-width="4">
+                <path d="M19.0565273,26.2272035 L19.0565275,-10.9636191 L12.0452029,-10.9636191 C12.0452029,-10.9636191 18.6643644,-10.9636191 23.1819009,-10.9636191 C25.175253,-10.9636191 26.4909891,-10.9636191 26.4909891,-10.9636191" id="Path-3-Copy" sketch:type="MSShapeGroup" transform="translate(19.268096, 7.631792) scale(-1, -1) rotate(-90.000000) translate(-19.268096, -7.631792) "></path>
+            </g>
+            <g id="Terminal-Fail-Detail-Copy-2" sketch:type="MSLayerGroup" transform="translate(103.000000, 180.000000)" stroke="#830010" stroke-width="4">
+                <path d="M19.0565273,26.2272035 L19.0565275,-10.9636191 L12.0452029,-10.9636191 C12.0452029,-10.9636191 18.6643644,-10.9636191 23.1819009,-10.9636191 C25.175253,-10.9636191 26.4909891,-10.9636191 26.4909891,-10.9636191" id="Path-3-Copy" sketch:type="MSShapeGroup" transform="translate(19.268096, 7.631792) scale(-1, -1) rotate(-90.000000) translate(-19.268096, -7.631792) "></path>
+            </g>
+            <g id="Terminal-Fail-Detail-Copy" sketch:type="MSLayerGroup" transform="translate(103.000000, 239.000000)" stroke="#830010" stroke-width="4">
+                <path d="M19.0565273,26.2272035 L19.0565275,-10.9636191 L12.0452029,-10.9636191 C12.0452029,-10.9636191 18.6643644,-10.9636191 23.1819009,-10.9636191 C25.175253,-10.9636191 26.4909891,-10.9636191 26.4909891,-10.9636191" id="Path-3-Copy" sketch:type="MSShapeGroup" transform="translate(19.268096, 7.631792) scale(-1, -1) rotate(-90.000000) translate(-19.268096, -7.631792) "></path>
+            </g>
+            <g id="Terminal-Pass-Detail" sketch:type="MSLayerGroup" transform="translate(102.600000, 118.000000)" stroke="#417505" stroke-width="4">
+                <path d="M19.4874002,26.3378348 L19.4874003,-11.0742504 L12.2416546,-11.0742504 C12.2416546,-11.0742504 19.0821254,-11.0742504 23.7507042,-11.0742504 C25.8107033,-11.0742504 27.1704306,-11.0742504 27.1704306,-11.0742504" id="Path-3-Copy-2" sketch:type="MSShapeGroup" transform="translate(19.706043, 7.631792) scale(-1, -1) rotate(-90.000000) translate(-19.706043, -7.631792) "></path>
+            </g>
+            <g id="Terminal-Pass-Detail-Copy-2" sketch:type="MSLayerGroup" transform="translate(102.000000, 200.000000)" stroke="#417505" stroke-width="4">
+                <path d="M19.4874002,26.3378348 L19.4874003,-11.0742504 L12.2416546,-11.0742504 C12.2416546,-11.0742504 19.0821254,-11.0742504 23.7507042,-11.0742504 C25.8107033,-11.0742504 27.1704306,-11.0742504 27.1704306,-11.0742504" id="Path-3-Copy-2" sketch:type="MSShapeGroup" transform="translate(19.706043, 7.631792) scale(-1, -1) rotate(-90.000000) translate(-19.706043, -7.631792) "></path>
+            </g>
+            <g id="Path-5-Copy-+-Path-7-Copy-Copy-Copy-Copy" sketch:type="MSLayerGroup" transform="translate(123.500000, 167.000000) scale(-1, 1) translate(-123.500000, -167.000000) translate(103.000000, 161.000000)" stroke="#9B9B9B">
+                <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" id="Path-5-Copy" fill="#9B9B9B" sketch:type="MSShapeGroup" transform="translate(34.881407, 5.987388) rotate(91.000000) translate(-34.881407, -5.987388) "></path>
+                <path d="M1.39796145,6 L31.5973985,6" id="Path-7" stroke-width="4" sketch:type="MSShapeGroup"></path>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-2" sketch:type="MSLayerGroup" transform="translate(70.000000, 116.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-8" sketch:type="MSLayerGroup" transform="translate(70.000000, 73.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-3" sketch:type="MSLayerGroup" transform="translate(70.000000, 137.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-4" sketch:type="MSLayerGroup" transform="translate(70.000000, 178.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-5" sketch:type="MSLayerGroup" transform="translate(70.000000, 199.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-6" sketch:type="MSLayerGroup" transform="translate(70.000000, 219.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">1</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy" sketch:type="MSLayerGroup" transform="translate(70.000000, 95.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">2</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-7" sketch:type="MSLayerGroup" transform="translate(70.000000, 157.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">2</tspan>
+                </text>
+            </g>
+            <g id="Try-#-Small-Detail-Copy-9" sketch:type="MSLayerGroup" transform="translate(70.000000, 240.000000)">
+                <circle id="Oval-1" stroke="#979797" stroke-width="0.800000012" fill="#F6F6F6" sketch:type="MSShapeGroup" cx="7" cy="7" r="7"></circle>
+                <text id="1" sketch:type="MSTextLayer" font-family="Arial" font-size="9" font-weight="normal" sketch:alignment="middle" line-spacing="12" fill="#4A4A4A">
+                    <tspan x="4.49731445" y="10">2</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
