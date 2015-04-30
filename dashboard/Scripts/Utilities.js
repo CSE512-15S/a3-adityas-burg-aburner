@@ -39,16 +39,16 @@ JSON.load = function(url, successCallback, failureCallback, options)
 {
     console.assert(url);
 
-    if (!(successCallback instanceof Function))
+    if (!_.isFunction(successCallback))
         return;
 
-    if (failureCallback && typeof failureCallback === "object")
+    if (_.isObject(failureCallback))
         options = failureCallback;
 
-    if (!(failureCallback instanceof Function))
+    if (_.isFunction(failureCallback))
         failureCallback = function() { };
 
-    if (typeof options !== "object")
+    if (!_.isObject(options))
         options = {};
 
     var request = new XMLHttpRequest;
@@ -65,7 +65,7 @@ JSON.load = function(url, successCallback, failureCallback, options)
 
         try {
             var responseText = request.responseText;
-            if (options.hasOwnProperty("jsonpCallbackName"))
+            if (_.has(options, "jsonpCallbackName"))
                 responseText = responseText.replace(new RegExp("^" + options.jsonpCallbackName + "\\((.*)\\);?$"), "$1");
             var data = JSON.parse(responseText);
         } catch (e) {
@@ -78,7 +78,7 @@ JSON.load = function(url, successCallback, failureCallback, options)
     };
 
     request.open("GET", url);
-    if (options.hasOwnProperty("withCredentials"))
+    if (_.has(options, "withCredentials"))
         request.withCredentials = options.withCredentials;
     request.send();
 };
@@ -86,7 +86,7 @@ JSON.load = function(url, successCallback, failureCallback, options)
 function loadXML(url, callback, options) {
     console.assert(url);
 
-    if (!(callback instanceof Function))
+    if (!_.isFunction(callback))
         return;
 
     var request = new XMLHttpRequest;
@@ -100,7 +100,7 @@ function loadXML(url, callback, options) {
     };
 
     request.open("GET", url);
-    if ((typeof options === "object") && options.hasOwnProperty("withCredentials"))
+    if (_.has(options, "withCredentials"))
         request.withCredentials = options.withCredentials;
     request.send();
 };
