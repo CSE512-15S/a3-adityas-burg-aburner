@@ -53,13 +53,8 @@ thead tr:first-of-type td {
     padding: 10px 0px;
 }
 
-div.main {
-    margin: 0 auto;
-    width: 1000px;
-}
-
 .content {
-    width: 930px;
+    width: 1000px;
     margin: auto;
     position: relative;
 }
@@ -77,31 +72,34 @@ h1 {
     right: 15px;
 }
 
-#queues {
-    position: relative;
+ul#queue-diagrams {
+    text-align: left;
+    list-style-type: none;
 }
 
-.queue-row {
-    min-width: 750px;
+li.queue {
     margin-bottom: 10px;
-    overflow: auto; /* clearfix */
+    display: block;
+    /* Hack to clear spaces from between inline elements.
+       See: http://stackoverflow.com/questions/2628050/ignore-whitespace-in-html */
+    font-size: 0;
 }
 
-.queue-item {
-    width: auto;
-    height: 275px;
-    float: left;
+li.queue .queue-item {
+    display: inline-block;
+    height: 270px;
     position: relative;
 }
 
-.queue-start h2 {
-    margin: 0;
-    padding: 0;
+li.queue span.queue-label {
     position: absolute;
+    top: 40px;
     left: 0;
     right: 0;
-    bottom: 175px;
+
     text-align: center;
+    font-weight: bold;
+    font-size: 26px !important;
 }
 
 /* Tries table */
