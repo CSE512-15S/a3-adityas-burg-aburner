@@ -1,123 +1,512 @@
-<!--
-Copyright (C) 2015 University of Washington.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
-1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-THE POSSIBILITY OF SUCH DAMAGE.
--->
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>WebKit Bot Watcher's Dashboard: Pipeline Metrics</title>
-
     <link rel="stylesheet" href="Styles/Main.css"></link>
-    <link rel="stylesheet" href="Styles/QueueView.css"></link>
     <link rel="stylesheet" href="Styles/Pipeline.css"></link>
-    <link rel="stylesheet" href="External/daterangepicker.css"></link>
 
     <script>
         window.WK = {};
     </script>
     <script src="Scripts/Utilities.js"></script>
     <script src="Scripts/BaseObject.js"></script>
-    <script src="Scripts/Dashboard.js"></script>
-    <script src="Scripts/Buildbot.js"></script>
-    <script src="Scripts/BubbleQueueServer.js"></script>
-    <script src="Scripts/WebKitBuildbot.js"></script>
-    <script src="Scripts/BuildbotQueue.js"></script>
-    <script src="Scripts/BubbleQueue.js"></script>
-    <script src="Scripts/BuildbotIteration.js"></script>
-    <script src="Scripts/BuildbotTestResults.js"></script>
-    <script src="Scripts/TracDataSource.js"></script>
-    <script src="Scripts/MetricsAnalyzer.js"></script>
-    <script src="Scripts/MetricsView.js"></script>
-    <script src="Scripts/MetricsBubbleView.js"></script>
     <script src="External/underscore-min.js"></script>
     <script src="External/jquery-1.11.1.min.js"></script>
     <script src="External/moment.min.js"></script>
     <script src="External/jquery.daterangepicker.js"></script>
+    <script src="External/d3.min.js"></script>
 </head>
 <body>
-
+<!--
+    cleanup regex
+    - kill sketch       sketch:\w*="\w*"
+    - kill ids          id="\S*"
+    - kill multispace   (?<=\S)  +
+-->
+<div class="content">
 <h1>Patch Processing Pipelines by Queue</h1>
-
-<div class="main">
-
-<table class="queue-pipelines">
-<thead>
-<tr>
-<td class="queue-label">Queue</td>
-<td class="queue-diagram">Results by Attempt</td>
-</thead>
-
-<tbody>
-<tr><td class="queue-label">ios</td>
-<td class="queue-diagram">
-
-<div class="diagram">
-<div class="tile queue">
-<span class="tile-label">Queue</span>
-<span class="arrow pass"></span>
-<span class="arrow fail"></span>
-<span class="arrow continue"></span>
+<div id="queues">
+    <div class="legend">
+        <svg width="145px" height="212px" viewBox="0 0 145 210" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g transform="translate(1, 0)">
+                <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0" width="138" height="201"></rect>
+                <g transform="translate(16, 15)">
+                    <g transform="translate(17, 13) rotate(90) translate(-17, -13) translate(5, -3.50)" stroke="#417505" fill="transparent" stroke-width="4" >
+                        <path d="M11.6177078,33 L11.6177079,0.0674695235 L0.98959976,0.0674695235 L16.2685848,0.0674695235 L23.0104002,0.0674695235" ></path>
+                    </g>
+                    <text font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#7D7D7D">
+                        <tspan text-anchor="middle" x="76" y="19">PASS</tspan>
+                    </text>
+                </g>
+                <g transform="translate(17, 53)">
+                    <g transform="translate(17, 11.50) rotate(-90) translate(-17, -11.50) translate(6, -5)" stroke="#830010" fill="transparent" stroke-width="4" >
+                        <path d="M10.6495655,32.9120852 L10.6495656,3.55271368e-15 L0.907133113,4.37819587e-15 L14.9128694,4.37819587e-15 L21.0928669,4.37819587e-15" transform="translate(11, 16.456043) scale(1, -1) translate(-11, -16.456043) "></path>
+                    </g>
+                    <text font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#7D7D7D">
+                        <tspan text-anchor="middle" x="76" y="17">FAIL</tspan>
+                    </text>
+                </g>
+                <g transform="translate(14, 92)">
+                    <g transform="translate(0, 3.25)" stroke="#4990E2" >
+                        <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" fill="#4990E2" transform="translate(34.881407, 5.987388) rotate(91) translate(-34.881407, -5.987388) "></path>
+                        <path d="M1.39796145,6 L31.5973985,6" stroke-width="4"></path>
+                    </g>
+                    <text font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#7D7D7D">
+                        <tspan text-anchor="middle" x="76" y="14.75">TRY</tspan>
+                    </text>
+                </g>
+                <g transform="translate(16, 129)">
+                    <g transform="translate(20.50, 9) scale(-1, 1) translate(-20.50, -9) translate(0, 3)" stroke="#9B9B9B" >
+                        <path d="M37.0840353,4.10048647 C36.5821509,2.96042324 35.580269,0.684582625 35.580269,0.684582625 C35.3567284,0.176795574 34.9807441,0.161576744 34.735521,0.660693 L29.7616312,10.7843282 C29.5186304,11.2789214 29.770481,11.6798684 30.3261796,11.6798684 L39.4161285,11.6798683 C39.9709208,11.6798683 40.2387477,11.2666225 40.0144177,10.7570423 C40.0144177,10.7570423 38.0619567,6.3218991 37.0840353,4.10048647 Z" fill="#9B9B9B" transform="translate(34.881407, 5.987388) rotate(91) translate(-34.881407, -5.987388) "></path>
+                        <path d="M1.39796145,6 L31.5973985,6" stroke-width="4"></path>
+                    </g>
+                    <text font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#7D7D7D">
+                        <tspan text-anchor="middle" x="76" y="14.5">ABORT</tspan>
+                    </text>
+                </g>
+                <g transform="translate(25, 160)">
+                    <text font-family="Helvetica Neue" font-size="14" font-weight="420" fill="#7D7D7D">
+                        <tspan text-anchor="middle" x="68" y="17.5">TRY #</tspan>
+                    </text>
+                    <g >
+                        <circle stroke="#979797" stroke-width="1.60000002" fill="#F6F6F6" cx="13" cy="13" r="13"></circle>
+                        <text font-family="Helvetica" font-size="14.4000002" font-weight="bold" fill="#4A4A4A">
+                            <tspan x="8.9375" y="17.65625">1</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </div>
 </div>
-<div class="tile attempt">
-<span class="tile-label">1</span>
-<span class="arrow pass"></span>
-<span class="arrow fail"></span>
-<span class="arrow continue"></span>
-</div>
-<div class="tile attempt">
-<span class="tile-label">2</span>
-<span class="arrow pass"></span>
-<span class="arrow fail"></span>
-</div>
-</div>
 
-</td></tr>
-
-<tr><td class="queue-label">mac</td>
-<td class="queue-diagram">Placeholder</td></tr>
-
-<tr><td class="queue-label">mac-wk2</td>
-<td class="queue-diagram">Placeholder</td></tr>
-
-<tr><td class="queue-label">win</td>
-<td class="queue-diagram">Placeholder</td></tr>
-
-</tbody>
+<div id="histograms"></div>
+<div id="details">
+<table class="tries-table">
+<thead><tr>
+    <th>Try</th>
+    <th>Result</th>
+    <th>Patch</th>
+    <th>Start</th>
+    <th>Duration</th>
+    <th>Author</th>
+    <th>Bug description</th>
+</tr></thead>
+<tbody />
 </table>
-
+</div>
 </div>
 
-<script>
-// For now, just work with static HTML and CSS. Once this looks
-// acceptable, build it up from fake model objects, then hook up to
-// real data, then make the date range configurable.
 
-WK = window.WK || {};
-
-document.addEventListener("DOMContentLoaded", function() {
-    WK.tracDataSource = new WK.TracDataSource("https://trac.webkit.org/");
-});
+<!-- These templates are used to generate the diagram and table rows. -->
+<script type="text/template" id="template-tries-row">
+<tr>
+<td><span class="try-num"><%- try_num %></span></td>
+<td>
+<%
+    switch(result_type) {
+        case 'try':
+            print('&rarr;');
+            break;
+        case 'pass':
+            print('&rarrb;');
+            break;
+        case 'fail':
+            print('&larrb;');
+            break;
+        case 'abort':
+            print('&larr;');
+            break;
+    }
+%>
+</td>
+<td><a href="<%= patch_url %>"><%- patch_name %></a></td>
+<td><%- start %></td>
+<td><%- duration %></td>
+<td><a href="<%= author_url %>"><%- author_name %></a></td>
+<td><a href="<%= author_url %>"><%- bug_description %></a></td>
+</tr>
 </script>
 
+<script type="text/template" id="template-queue-start">
+<div class="queue-item queue-start">
+<h2><%- name %></h2>
+<svg width="146px" height="270px" viewBox="0 0 146 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g transform="translate(1, 107)" stroke="#979797" stroke-width="4">
+        <rect fill="#D8D8D8" x="0.771953909" y="0" width="142.456092" height="52"></rect>
+        <path d="M21,5.59383155 L21,47.7669085" stroke-linecap="square" ></path>
+        <path d="M41,5.59383155 L41,47.7669085" stroke-linecap="square" ></path>
+        <path d="M61,5.59383155 L61,47.7669085" stroke-linecap="square" ></path>
+        <path d="M82,5.59383155 L82,47.7669085" stroke-linecap="square" ></path>
+        <path d="M102,5.59383155 L102,47.7669085" stroke-linecap="square" ></path>
+        <path d="M122,5.59383155 L122,47.7669085" stroke-linecap="square" ></path>
+    </g>
+</svg>
+</div>
+</script>
+
+<script type="text/template" id="template-queue-attempt">
+<div class="queue-item queue-attempt">
+<svg width="191px" height="270px" viewBox="0 0 191 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- pass line -->
+    <g transform="translate(146, 50)" stroke-width="4" stroke="#417505" fill="transparent">
+        <path d="M11.6177078,52 L11.6177079,0.106315613 L0.98959976,0.106315613 L16.2685848,0.106315613 L23.0104002,0.106315613" ></path>
+    </g>
+    <!-- fail line -->
+    <g transform="translate(146, 166)" stroke-width="4" stroke="#830010" fill="transparent">
+        <path d="M11.6177078,51.8936844 L11.6177079,7.10542736e-15 L0.98959976,8.40699522e-15 L16.2685848,8.40699522e-15 L23.0104002,8.40699522e-15" transform="translate(12, 25.946842) scale(1, -1) translate(-12, -25.946842) "></path>
+    </g>
+    <!-- abort line -->
+    <g transform="translate(88, 155)" stroke="#979797" fill="transparent">
+        <path d="M37.5595972,0.650981549 C45.6827916,5.02429358 53.2284229,14.1092189 45.8063474,22.1841615 C38.3842719,30.2591041 8.28363611,39.3434157 8.28363611,39.3434157" stroke-width="4" ></path>
+        <path d="M8.08769176,34.0883591 C7.86635346,33.5805994 7.43467643,33.5427764 7.12944456,33.995091 L0.662997921,43.577537 C0.35511091,44.0337862 0.54964366,44.4036492 1.10561167,44.4036492 L11.5841533,44.4036491 C12.1364891,44.4036491 12.4041394,43.9904773 12.1834773,43.4842689 L8.08769176,34.0883591 Z" fill="#9B9B9B" transform="translate(6.394867, 39.082669) rotate(3) translate(-6.394867, -39.082669) "></path>
+    </g>
+    <!-- attempt line -->
+    <g transform="translate(-1, 128)" stroke="#4990E2" fill="transparent">
+        <path d="M110.572612,0.673767889 C110.350113,0.16834785 109.974974,0.155047863 109.729751,0.654164119 L104.755861,10.7777993 C104.51286,11.2723925 104.764711,11.6733395 105.320409,11.6733395 L114.410358,11.6733394 C114.965151,11.6733394 115.234348,11.263208 115.012029,10.7581955 L110.572612,0.673767889 Z" fill="#4990E2" transform="translate(109.875314, 5.986958) rotate(91) translate(-109.875314, -5.986958) "></path>
+        <path d="M0.643792344,6 L106.597398,6" stroke-width="4" ></path>
+    </g>
+    <!-- pass label -->
+    <g transform="translate(128, 10)">
+        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"></rect>
+        <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
+            <tspan text-anchor="middle" x="29" y="14"><%= pass.percent %></tspan>
+        </text>
+        <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
+            <tspan text-anchor="middle" x="29" y="25.075"><%= pass.caption %></tspan>
+        </text>
+    </g>
+    <!-- fail label -->
+    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(128, 224)">
+        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+        <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
+            <tspan text-anchor="middle" x="29" y="14"><%= fail.percent %></tspan>
+        </text>
+        <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
+            <tspan text-anchor="middle" x="29" y="25.075"><%= fail.caption %></tspan>
+        </text>
+    </g>
+    <!-- abort label -->
+    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(23, 194)">
+        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+        <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
+            <tspan text-anchor="middle" x="29" y="14"><%= abort.percent %></tspan>
+        </text>
+        <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
+            <tspan text-anchor="middle" x="29" y="25.075"><%= abort.caption %></tspan>
+        </text>
+    </g>
+    <!-- attempt label -->
+    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(22, 117)">
+        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+        <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
+            <tspan text-anchor="middle" x="29" y="14"><%= attempt.percent %></tspan>
+        </text>
+        <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
+            <tspan text-anchor="middle" x="29" y="25.075"><%= attempt.caption %></tspan>
+        </text>
+    </g>
+    <!-- attempt number circle -->
+    <g transform="translate(125, 102)">
+        <circle stroke="#979797" stroke-width="4" fill="#F6F6F6" cx="32" cy="32" r="32"></circle>
+        <text font-family="Helvetica" font-size="36" font-weight="bold" fill="#4A4A4A">
+            <tspan text-anchor="middle" x="32" y="44"><%= name %></tspan>
+        </text>
+    </g>
+</svg>
+</div>
+</script>
+
+<script type="text/javascript">
+/**
+ * Underscore template functions
+ */
+
+var templates = {
+    triesRow: _.template($('#template-tries-row').html()),
+    queueStart: _.template($('#template-queue-start').html()),
+    queueAttempt: _.template($('#template-queue-attempt').html())
+};
+
+
+/**
+ * Queue flow diagram rows
+ */
+
+function QueueRow(args) {
+    // attributes
+    this.name = args.name;
+    this.attempts = args.attempts;
+    // elements
+    this.$parent = args.$parent;
+    this.$row = undefined;
+    // construction
+    this.makeRow();
+    this.makeAttempts();
+    // insertion
+    this.$parent.append(this.$row);
+}
+
+QueueRow.prototype.makeRow = function () {
+    this.$row = $('<div class="queue-row"></div>');
+    this.$row.append(templates.queueStart({
+        name: this.name
+    }));
+};
+
+QueueRow.prototype.makeAttempts = function () {
+    this.attempts.forEach(function (attempt) {
+        this.$row.append(templates.queueAttempt(attempt));
+    }, this);
+};
+
+var macRow = new QueueRow({
+    $parent: $('#queues'),
+    name: 'Mac',
+    attempts: [
+        {
+            name: '1',
+            attempt: {
+                percent: '100%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            pass: {
+                percent: '50%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            fail: {
+                percent: '30%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            abort: {
+                percent: '10%',
+                caption: '2-55s (x\u0305 5s)'
+            }
+        },
+        {
+            name: '2',
+            attempt: {
+                percent: '10%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            pass: {
+                percent: '1%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            fail: {
+                percent: '4%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            abort: {
+                percent: '2%',
+                caption: '2-55s (x\u0305 5s)'
+            }
+        },
+        {
+            name: '3+',
+            attempt: {
+                percent: '3%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            pass: {
+                percent: '0.5%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            fail: {
+                percent: '1%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            abort: {
+                percent: '1.5%',
+                caption: '2-55s (x\u0305 5s)'
+            }
+        }
+    ]
+});
+
+var iosRow = new QueueRow({
+    $parent: $('#queues'),
+    name: 'iOS',
+    attempts: [
+        {
+            name: '1',
+            attempt: {
+                percent: '100%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            pass: {
+                percent: '50%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            fail: {
+                percent: '30%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            abort: {
+                percent: '10%',
+                caption: '2-55s (x\u0305 5s)'
+            }
+        },
+        {
+            name: '2',
+            attempt: {
+                percent: '10%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            pass: {
+                percent: '1%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            fail: {
+                percent: '4%',
+                caption: '2-55s (x\u0305 5s)'
+            },
+            abort: {
+                percent: '2%',
+                caption: '2-55s (x\u0305 5s)'
+            }
+        }
+    ]
+});
+
+
+/**
+ * Tries table rows
+ */
+
+var triesTable = (function () {
+
+    var $tbody = $('#details')
+        .find('.tries-table')
+        .find('tbody');
+
+    function addRow(row) {
+        $tbody.append(templates.triesRow(row));
+    }
+
+    function addRows(rows) {
+        rows.forEach(addRow);
+    }
+
+    return {
+        addRow: addRow,
+        addRows: addRows
+    }
+
+})();
+
+triesTable.addRow({
+    try_num: 1,
+    result_type: 'try',
+    patch_name: 2839492,
+    patch_url: '#',
+    start: '1h 30s ago',
+    duration: '30m 10s',
+    author_name: 'agomez',
+    author_url: '#',
+    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+    bug_url: '#'
+});
+
+triesTable.addRows([
+{
+    try_num: 2,
+    result_type: 'abort',
+    patch_name: 2839492,
+    patch_url: '#',
+    start: '1h 30s ago',
+    duration: '30m 10s',
+    author_name: 'agomez',
+    author_url: '#',
+    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+    bug_url: '#'
+},
+{
+    try_num: 3,
+    result_type: 'pass',
+    patch_name: 2839492,
+    patch_url: '#',
+    start: '1h 30s ago',
+    duration: '30m 10s',
+    author_name: 'agomez',
+    author_url: '#',
+    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+    bug_url: '#'
+},
+{
+    try_num: 4,
+    result_type: 'fail',
+    patch_name: 2839492,
+    patch_url: '#',
+    start: '1h 30s ago',
+    duration: '30m 10s',
+    author_name: 'agomez',
+    author_url: '#',
+    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+    bug_url: '#'
+}
+]);
+</script>
+
+<script>
+
+// Generate a Bates distribution of 10 random variables.
+var values = d3.range(1000).map(d3.random.bates(10));
+
+// A formatter for counts.
+var formatCount = d3.format(",.0f");
+
+var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([0, 1])
+    .range([0, width]);
+
+// Generate a histogram using twenty uniformly-spaced bins.
+var data = d3.layout.histogram()
+    .bins(x.ticks(20))
+    (values);
+
+var y = d3.scale.linear()
+    .domain([0, d3.max(data, function(d) { return d.y; })])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var bar = svg.selectAll(".bar")
+    .data(data)
+  .enter().append("g")
+    .attr("class", "bar")
+    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+bar.append("rect")
+    .attr("x", 1)
+    .attr("width", x(data[0].dx) - 1)
+    .attr("height", function(d) { return height - y(d.y); });
+
+bar.append("text")
+    .attr("dy", ".75em")
+    .attr("y", 6)
+    .attr("x", x(data[0].dx) / 2)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return formatCount(d.y); });
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+</script>
 </body>
 </html>
