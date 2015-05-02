@@ -5,6 +5,7 @@
     <title>WebKit Bot Watcher's Dashboard: Pipeline Metrics</title>
     <link rel="stylesheet" href="Styles/Main.css"></link>
     <link rel="stylesheet" href="Styles/Pipeline.css"></link>
+    <link rel="stylesheet" href="Styles/BuildAttemptTableView.css"></link>
 
     <script src="External/underscore-min.js"></script>
     <script src="External/jquery-1.11.1.min.js"></script>
@@ -17,6 +18,7 @@
     </script>
     <script src="Scripts/Utilities.js"></script>
     <script src="Scripts/BaseObject.js"></script>
+    <script src="Views/BuildAttemptTableView.js"></script>
     <script src="Views/QueueDiagramView.js"></script>
 </head>
 <body>
@@ -89,24 +91,12 @@
 <div id="histograms"></div>
 
 <div id="details">
-<table class="tries-table">
-<thead><tr>
-    <th>Try</th>
-    <th>Result</th>
-    <th>Patch</th>
-    <th>Start</th>
-    <th>Duration</th>
-    <th>Author</th>
-    <th>Bug description</th>
-</tr></thead>
-<tbody />
-</table>
-</div>
 </div>
 
+</div>
 
 <!-- These templates are used to generate the diagram and table rows. -->
-<script type="text/template" id="template-tries-row">
+<script type="text/template" id="BuildAttemptTableView-row">
 <tr>
 <td><span class="try-num"><%- view.try_num %></span></td>
 <td>
@@ -233,7 +223,7 @@ var options = {'variable': 'view'};
 var templates = {
     queueStart: _.template($('#QueueDiagramView-start').html(), options),
     queueAttempt: _.template($('#QueueDiagramView-attempt').html(), options),
-    triesRow: _.template($('#template-tries-row').html(), options)
+    attemptRow: _.template($('#BuildAttemptTableView-row').html(), options)
 };
 
 /**
@@ -354,32 +344,8 @@ var $queueList = $("#queue-diagrams");
 $queueList.append(macQueueDiagramView.$element);
 $queueList.append(iosQueueDiagramView.$element);
 
-/**
- * Tries table rows
- */
-
-var triesTable = (function () {
-
-    var $tbody = $('#details')
-        .find('.tries-table')
-        .find('tbody');
-
-    function addRow(row) {
-        $tbody.append(templates.triesRow(row));
-    }
-
-    function addRows(rows) {
-        rows.forEach(addRow);
-    }
-
-    return {
-        addRow: addRow,
-        addRows: addRows
-    }
-
-})();
-
-triesTable.addRow({
+var attemptsArray = [];
+attemptsArray.push({
     try_num: 1,
     result_type: 'try',
     patch_name: 2839492,
@@ -392,10 +358,9 @@ triesTable.addRow({
     bug_url: '#'
 });
 
-triesTable.addRows([
-{
-    try_num: 2,
-    result_type: 'abort',
+attemptsArray.push({
+    try_num: 1,
+    result_type: 'try',
     patch_name: 2839492,
     patch_url: '#',
     start: '1h 30s ago',
@@ -404,10 +369,11 @@ triesTable.addRows([
     author_url: '#',
     bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
     bug_url: '#'
-},
-{
-    try_num: 3,
-    result_type: 'pass',
+});
+
+attemptsArray.push({
+    try_num: 1,
+    result_type: 'try',
     patch_name: 2839492,
     patch_url: '#',
     start: '1h 30s ago',
@@ -416,10 +382,11 @@ triesTable.addRows([
     author_url: '#',
     bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
     bug_url: '#'
-},
-{
-    try_num: 4,
-    result_type: 'fail',
+});
+
+attemptsArray.push({
+    try_num: 1,
+    result_type: 'try',
     patch_name: 2839492,
     patch_url: '#',
     start: '1h 30s ago',
@@ -428,8 +395,12 @@ triesTable.addRows([
     author_url: '#',
     bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
     bug_url: '#'
-}
-]);
+});
+
+var dummyBuildAttemptsTable = new WK.BuildAttemptTableView(attemptsArray);
+var $details = $("#details");
+$details.append(dummyBuildAttemptsTable.$element);
+
 </script>
 
 <script>
