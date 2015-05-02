@@ -5,6 +5,7 @@
     <title>WebKit Bot Watcher's Dashboard: Pipeline Metrics</title>
     <style type="text/css">
 
+
         /**
          * General page rules
          */
@@ -26,6 +27,7 @@
             margin-bottom: 32px;
             text-align: center;
         }
+
 
         /**
          * Queue flow diagrams
@@ -64,9 +66,13 @@
             text-align: center;
         }
 
+
         /**
          * Time histograms
          */
+
+        /* todo */
+
 
         /**
          * Tries table
@@ -81,16 +87,41 @@
         }
         .tries-table td,
         .tries-table th {
-            padding: 5px;
+            padding: 6px;
             text-align: left;
         }
+        .tries-table td:first-of-type,
+        .tries-table th:first-of-type {
+            padding-left: 24px;
+        }
+        .tries-table td:last-of-type,
+        .tries-table th:last-of-type {
+            padding-left: 24px;
+        }
         .tries-table thead {
-            padding-bottom: 4px;
-            margin-bottom: 4px;
             border-bottom: 3px solid #9C9C9C;
         }
-        .tries-table tbody {
-            padding-top: 10px;
+        .tries-table thead th {
+            padding-bottom: 10px;
+        }
+        .tries-table tbody tr:first-of-type td {
+            padding-top: 12px;
+        }
+        .tries-table tbody tr td:nth-of-type(1),
+        .tries-table tbody tr td:nth-of-type(2) {
+            text-align: center;
+        }
+
+        .tries-table .try-num {
+            display: block;
+            width: 18px;
+            height: 18px;
+            margin: auto;
+            border-radius: 100px;
+            border: 1px solid #A2A2A2;
+            background: white;
+            font-size: 12px;
+            line-height: 18px;
         }
 
     </style>
@@ -175,46 +206,58 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>&rarr;</td>
-                    <td><a href="#">2839492</a></td>
-                    <td>1h 30s ago</td>
-                    <td>30m 10s</td>
-                    <td><a href="#">agomez</a></td>
-                    <td><a href="#">141173: [GTK] Web Inspector: New Images for Object...</a></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>&rarrb;</td>
-                    <td><a href="#">2839492</a></td>
-                    <td>1h 30s ago</td>
-                    <td>30m 10s</td>
-                    <td><a href="#">agomez</a></td>
-                    <td><a href="#">141173: [GTK] Web Inspector: New Images for Object...</a></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>&larr;</td>
-                    <td><a href="#">2839492</a></td>
-                    <td>1h 30s ago</td>
-                    <td>30m 10s</td>
-                    <td><a href="#">agomez</a></td>
-                    <td><a href="#">141173: [GTK] Web Inspector: New Images for Object...</a></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>&rarrb;</td>
-                    <td><a href="#">2839492</a></td>
-                    <td>1h 30s ago</td>
-                    <td>30m 10s</td>
-                    <td><a href="#">agomez</a></td>
-                    <td><a href="#">141173: [GTK] Web Inspector: New Images for Object...</a></td>
-                </tr>
             </tbody>
         </table>
     </div>
 </div>
+<script type="text/template" id="template-tries-row">
+    <tr>
+        <td>
+            <span class="try-num">
+                <%- try_num %>
+            </span>
+        </td>
+        <td>
+        <%
+            switch(result_type) {
+                case 'try':
+                    print('&rarr;');
+                    break;
+                case 'pass':
+                    print('&rarrb;');
+                    break;
+                case 'fail':
+                    print('&larrb;');
+                    break;
+                case 'abort':
+                    print('&larr;');
+                    break;
+            }
+        %>
+        </td>
+        <td>
+            <a href="<%= patch_url %>">
+                <%- patch_name %>
+            </a>
+        </td>
+        <td>
+            <%- start %>
+        </td>
+        <td>
+            <%- duration %>
+        </td>
+        <td>
+            <a href="<%= author_url %>">
+                <%- author_name %>
+            </a>
+        </td>
+        <td>
+            <a href="<%= author_url %>">
+                <%- bug_description %>
+            </a>
+        </td>
+    </tr>
+</script>
 <script type="text/template" id="template-queue-start">
     <div class="queue-item queue-start">
         <h1><%- name %></h1>
@@ -306,10 +349,21 @@
 <script type="text/javascript" src="External/underscore-min.js"></script>
 <script type="text/javascript">
 
+
+    /**
+     * Underscore template functions
+     */
+
     var templates = {
+        triesRow: _.template($('#template-tries-row').html()),
         queueStart: _.template($('#template-queue-start').html()),
         queueAttempt: _.template($('#template-queue-attempt').html())
     };
+
+
+    /**
+     * Queue flow diagram rows
+     */
 
     function QueueRow(args) {
         // attributes
@@ -339,6 +393,7 @@
     };
 
     var macRow = new QueueRow({
+        $parent: $('#queues'),
         name: 'Mac',
         attempts: [
             {
@@ -398,11 +453,11 @@
                     caption: '2-55s (x\u0305 5s)'
                 }
             }
-        ],
-        $parent: $('#queues')
+        ]
     });
 
     var iosRow = new QueueRow({
+        $parent: $('#queues'),
         name: 'iOS',
         attempts: [
             {
@@ -443,9 +498,86 @@
                     caption: '2-55s (x\u0305 5s)'
                 }
             }
-        ],
-        $parent: $('#queues')
+        ]
     });
+
+
+    /**
+     * Tries table rows
+     */
+
+    var triesTable = (function () {
+
+        var $tbody = $('#details')
+            .find('.tries-table')
+            .find('tbody');
+
+        function addRow(row) {
+            $tbody.append(templates.triesRow(row));
+        }
+
+        function addRows(rows) {
+            rows.forEach(addRow);
+        }
+
+        return {
+            addRow: addRow,
+            addRows: addRows
+        }
+
+    })();
+
+    triesTable.addRow({
+        try_num: 1,
+        result_type: 'try',
+        patch_name: 2839492,
+        patch_url: '#',
+        start: '1h 30s ago',
+        duration: '30m 10s',
+        author_name: 'agomez',
+        author_url: '#',
+        bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+        bug_url: '#'
+    });
+
+    triesTable.addRows([
+        {
+            try_num: 2,
+            result_type: 'abort',
+            patch_name: 2839492,
+            patch_url: '#',
+            start: '1h 30s ago',
+            duration: '30m 10s',
+            author_name: 'agomez',
+            author_url: '#',
+            bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+            bug_url: '#'
+        },
+        {
+            try_num: 3,
+            result_type: 'pass',
+            patch_name: 2839492,
+            patch_url: '#',
+            start: '1h 30s ago',
+            duration: '30m 10s',
+            author_name: 'agomez',
+            author_url: '#',
+            bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+            bug_url: '#'
+        },
+        {
+            try_num: 4,
+            result_type: 'fail',
+            patch_name: 2839492,
+            patch_url: '#',
+            start: '1h 30s ago',
+            duration: '30m 10s',
+            author_name: 'agomez',
+            author_url: '#',
+            bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
+            bug_url: '#'
+        }
+    ]);
 
 </script>
 </body>
