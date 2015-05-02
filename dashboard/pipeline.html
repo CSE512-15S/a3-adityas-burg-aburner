@@ -18,6 +18,7 @@
     </script>
     <script src="Scripts/Utilities.js"></script>
     <script src="Scripts/BaseObject.js"></script>
+    <script src="Models/DummyData.js"></script>
     <script src="Views/BuildAttemptTableView.js"></script>
     <script src="Views/QueueDiagramView.js"></script>
 </head>
@@ -85,13 +86,9 @@
 </svg>
 </div>
 
-<ul id="queue-diagrams">
-</ul>
-
-<div id="histograms"></div>
-
-<div id="details">
-</div>
+<ul id="queue-diagrams"></ul>
+<div id="histograms" />
+<div id="details" />
 
 </div>
 
@@ -215,195 +212,28 @@
 </script>
 
 <script type="text/javascript">
-/**
- * Underscore template functions
- */
 
+document.addEventListener("DOMContentLoaded", function() {
+// Underscore template functions
 var options = {'variable': 'view'};
-var templates = {
-    queueStart: _.template($('#QueueDiagramView-start').html(), options),
-    queueAttempt: _.template($('#QueueDiagramView-attempt').html(), options),
-    attemptRow: _.template($('#BuildAttemptTableView-row').html(), options)
+WK.ViewTemplates = {
+    queueDiagramStart: _.template($('#QueueDiagramView-start').html(), options),
+    queueDiagramAttempt: _.template($('#QueueDiagramView-attempt').html(), options),
+    buildAttemptTableRow: _.template($('#BuildAttemptTableView-row').html(), options)
 };
 
-/**
- * Queue flow diagram rows
- */
-
-var macQueueObject = {
-    name: 'Mac',
-    attempts: [
-        {
-            name: '1',
-            attempt: {
-                percent: '100%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '50%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '30%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            }
-        },
-        {
-            name: '2',
-            attempt: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '4%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '2%',
-                caption: '2-55s (x\u0305 5s)'
-            }
-        },
-        {
-            name: '3+',
-            attempt: {
-                percent: '3%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '0.5%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '1.5%',
-                caption: '2-55s (x\u0305 5s)'
-            }
-        }
-    ]
-};
-
-var iosQueueObject = {
-    name: 'iOS',
-    attempts: [
-        {
-            name: '1',
-            attempt: {
-                percent: '100%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '50%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '30%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            }
-        },
-        {
-            name: '2',
-            attempt: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '4%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '2%',
-                caption: '2-55s (x\u0305 5s)'
-            }
-        }
-    ]
-};
-
-var macQueueDiagramView = new WK.QueueDiagramView(macQueueObject);
-var iosQueueDiagramView = new WK.QueueDiagramView(iosQueueObject);
+var macQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.macQueue);
+var iosQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.iosQueue);
 
 var $queueList = $("#queue-diagrams");
 $queueList.append(macQueueDiagramView.$element);
 $queueList.append(iosQueueDiagramView.$element);
 
-var attemptsArray = [];
-attemptsArray.push({
-    try_num: 1,
-    result_type: 'try',
-    patch_name: 2839492,
-    patch_url: '#',
-    start: '1h 30s ago',
-    duration: '30m 10s',
-    author_name: 'agomez',
-    author_url: '#',
-    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
-    bug_url: '#'
-});
-
-attemptsArray.push({
-    try_num: 1,
-    result_type: 'try',
-    patch_name: 2839492,
-    patch_url: '#',
-    start: '1h 30s ago',
-    duration: '30m 10s',
-    author_name: 'agomez',
-    author_url: '#',
-    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
-    bug_url: '#'
-});
-
-attemptsArray.push({
-    try_num: 1,
-    result_type: 'try',
-    patch_name: 2839492,
-    patch_url: '#',
-    start: '1h 30s ago',
-    duration: '30m 10s',
-    author_name: 'agomez',
-    author_url: '#',
-    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
-    bug_url: '#'
-});
-
-attemptsArray.push({
-    try_num: 1,
-    result_type: 'try',
-    patch_name: 2839492,
-    patch_url: '#',
-    start: '1h 30s ago',
-    duration: '30m 10s',
-    author_name: 'agomez',
-    author_url: '#',
-    bug_description: '141173: [GTK] Web Inspector: New Images for Object...',
-    bug_url: '#'
-});
-
-var dummyBuildAttemptsTable = new WK.BuildAttemptTableView(attemptsArray);
+var dummyBuildAttemptsTable = new WK.BuildAttemptTableView(WK.DummyData.buildAttempts);
 var $details = $("#details");
 $details.append(dummyBuildAttemptsTable.$element);
 
-</script>
-
-<script>
+// FIXME: extract the histogram into a view that uses source data.
 
 // Generate a Bates distribution of 10 random variables.
 var values = d3.range(1000).map(d3.random.bates(10));
@@ -460,7 +290,7 @@ svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
-
+});
 </script>
 </body>
 </html>

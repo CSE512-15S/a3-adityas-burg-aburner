@@ -48,13 +48,13 @@ WK.QueueDiagramView.prototype = {
 
     makeRow: function()
     {
-        this.$element.append(templates.queueStart(this));
+        this.$element.append(WK.ViewTemplates.queueDiagramStart(this));
     },
 
     makeAttempts: function()
     {
         this.attempts.forEach(function (attempt) {
-            this.$element.append(templates.queueAttempt(attempt));
+            this.$element.append(WK.ViewTemplates.queueDiagramAttempt(attempt));
         }, this);
     }
 };

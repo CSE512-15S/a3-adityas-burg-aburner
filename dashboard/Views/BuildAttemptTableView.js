@@ -45,7 +45,7 @@ WK.BuildAttemptTableView = function(attempts) {
     columns.forEach(function(column) { lines.push('<th>' + column.label + '</th>') });
     lines.push('</tr></thead><tbody>')
     this._attempts.forEach(function(attempt) {
-        lines.push(templates.attemptRow(attempt));
+        lines.push(WK.ViewTemplates.buildAttemptTableRow(attempt));
     });
     lines.push('</tbody></table>');
     this.$element = $(lines.join(''));
