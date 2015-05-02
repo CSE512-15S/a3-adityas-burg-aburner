@@ -6,16 +6,18 @@
     <link rel="stylesheet" href="Styles/Main.css"></link>
     <link rel="stylesheet" href="Styles/Pipeline.css"></link>
 
-    <script>
-        window.WK = {};
-    </script>
-    <script src="Scripts/Utilities.js"></script>
-    <script src="Scripts/BaseObject.js"></script>
     <script src="External/underscore-min.js"></script>
     <script src="External/jquery-1.11.1.min.js"></script>
     <script src="External/moment.min.js"></script>
     <script src="External/jquery.daterangepicker.js"></script>
     <script src="External/d3.min.js"></script>
+
+    <script>
+        window.WK = {};
+    </script>
+    <script src="Scripts/Utilities.js"></script>
+    <script src="Scripts/BaseObject.js"></script>
+    <script src="Views/QueueDiagramView.js"></script>
 </head>
 <body>
 <!--
@@ -106,10 +108,10 @@
 <!-- These templates are used to generate the diagram and table rows. -->
 <script type="text/template" id="template-tries-row">
 <tr>
-<td><span class="try-num"><%- try_num %></span></td>
+<td><span class="try-num"><%- view.try_num %></span></td>
 <td>
 <%
-    switch(result_type) {
+    switch(view.result_type) {
         case 'try':
             print('&rarr;');
             break;
@@ -125,17 +127,17 @@
     }
 %>
 </td>
-<td><a href="<%= patch_url %>"><%- patch_name %></a></td>
-<td><%- start %></td>
-<td><%- duration %></td>
-<td><a href="<%= author_url %>"><%- author_name %></a></td>
-<td><a href="<%= author_url %>"><%- bug_description %></a></td>
+<td><a href="<%= view.patch_url %>"><%- view.patch_name %></a></td>
+<td><%- view.start %></td>
+<td><%- view.duration %></td>
+<td><a href="<%= view.author_url %>"><%- view.author_name %></a></td>
+<td><a href="<%= view.author_url %>"><%- view.bug_description %></a></td>
 </tr>
 </script>
 
-<script type="text/template" id="template-queue-start">
+<script type="text/template" id="QueueDiagramView-start">
 <div class="queue-item queue-start">
-<span class="queue-label"><%- name %></span>
+<span class="queue-label"><%- view.name %></span>
 <svg width="146px" height="270px" viewBox="0 0 146 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g transform="translate(1, 107)" stroke="#979797" stroke-width="4">
         <rect fill="#D8D8D8" x="0.771953909" y="0" width="142.456092" height="52"></rect>
@@ -150,7 +152,7 @@
 </div>
 </script>
 
-<script type="text/template" id="template-queue-attempt">
+<script type="text/template" id="QueueDiagramView-attempt">
 <div class="queue-item queue-attempt">
 <svg width="191px" height="270px" viewBox="0 0 191 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- pass line -->
@@ -175,47 +177,47 @@
     <g transform="translate(128, 10)">
         <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"></rect>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= pass.percent %></tspan>
+            <tspan text-anchor="middle" x="29" y="14"><%= view.pass.percent %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= pass.caption %></tspan>
+            <tspan text-anchor="middle" x="29" y="25.075"><%= view.pass.caption %></tspan>
         </text>
     </g>
     <!-- fail label -->
     <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(128, 224)">
         <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= fail.percent %></tspan>
+            <tspan text-anchor="middle" x="29" y="14"><%= view.fail.percent %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= fail.caption %></tspan>
+            <tspan text-anchor="middle" x="29" y="25.075"><%= view.fail.caption %></tspan>
         </text>
     </g>
     <!-- abort label -->
     <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(23, 194)">
         <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= abort.percent %></tspan>
+            <tspan text-anchor="middle" x="29" y="14"><%= view.abort.percent %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= abort.caption %></tspan>
+            <tspan text-anchor="middle" x="29" y="25.075"><%= view.abort.caption %></tspan>
         </text>
     </g>
     <!-- attempt label -->
     <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(22, 117)">
         <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= attempt.percent %></tspan>
+            <tspan text-anchor="middle" x="29" y="14"><%= view.attempt.percent %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= attempt.caption %></tspan>
+            <tspan text-anchor="middle" x="29" y="25.075"><%= view.attempt.caption %></tspan>
         </text>
     </g>
     <!-- attempt number circle -->
     <g transform="translate(125, 102)">
         <circle stroke="#979797" stroke-width="4" fill="#F6F6F6" cx="32" cy="32" r="32"></circle>
         <text font-family="Helvetica" font-size="36" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="32" y="44"><%= name %></tspan>
+            <tspan text-anchor="middle" x="32" y="44"><%= view.name %></tspan>
         </text>
     </g>
 </svg>
@@ -227,46 +229,18 @@
  * Underscore template functions
  */
 
+var options = {'variable': 'view'};
 var templates = {
-    triesRow: _.template($('#template-tries-row').html()),
-    queueStart: _.template($('#template-queue-start').html()),
-    queueAttempt: _.template($('#template-queue-attempt').html())
+    queueStart: _.template($('#QueueDiagramView-start').html(), options),
+    queueAttempt: _.template($('#QueueDiagramView-attempt').html(), options),
+    triesRow: _.template($('#template-tries-row').html(), options)
 };
-
 
 /**
  * Queue flow diagram rows
  */
 
-function QueueRow(args) {
-    // attributes
-    this.name = args.name;
-    this.attempts = args.attempts;
-    // elements
-    this.$parent = args.$parent;
-    this.$row = undefined;
-    // construction
-    this.makeRow();
-    this.makeAttempts();
-    // insertion
-    this.$parent.append(this.$row);
-}
-
-QueueRow.prototype.makeRow = function () {
-    this.$row = $('<li class="queue"></li>');
-    this.$row.append(templates.queueStart({
-        name: this.name
-    }));
-};
-
-QueueRow.prototype.makeAttempts = function () {
-    this.attempts.forEach(function (attempt) {
-        this.$row.append(templates.queueAttempt(attempt));
-    }, this);
-};
-
-var macRow = new QueueRow({
-    $parent: $('#queue-diagrams'),
+var macQueueObject = {
     name: 'Mac',
     attempts: [
         {
@@ -327,10 +301,9 @@ var macRow = new QueueRow({
             }
         }
     ]
-});
+};
 
-var iosRow = new QueueRow({
-    $parent: $('#queue-diagrams'),
+var iosQueueObject = {
     name: 'iOS',
     attempts: [
         {
@@ -372,8 +345,14 @@ var iosRow = new QueueRow({
             }
         }
     ]
-});
+};
 
+var macQueueDiagramView = new WK.QueueDiagramView(macQueueObject);
+var iosQueueDiagramView = new WK.QueueDiagramView(iosQueueObject);
+
+var $queueList = $("#queue-diagrams");
+$queueList.append(macQueueDiagramView.$element);
+$queueList.append(iosQueueDiagramView.$element);
 
 /**
  * Tries table rows
