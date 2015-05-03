@@ -21,6 +21,7 @@
     <script src="Models/DummyData.js"></script>
     <script src="Views/BuildAttemptTableView.js"></script>
     <script src="Views/QueueDiagramView.js"></script>
+    <script src="Controllers/PipelineViewController.js"></script>
 </head>
 <body>
 <!--
@@ -213,7 +214,6 @@
 
 <script type="text/javascript">
 
-document.addEventListener("DOMContentLoaded", function() {
 // Underscore template functions
 var options = {'variable': 'view'};
 WK.ViewTemplates = {
@@ -222,16 +222,9 @@ WK.ViewTemplates = {
     buildAttemptTableRow: _.template($('#BuildAttemptTableView-row').html(), options)
 };
 
-var macQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.macQueue);
-var iosQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.iosQueue);
-
-var $queueList = $("#queue-diagrams");
-$queueList.append(macQueueDiagramView.$element);
-$queueList.append(iosQueueDiagramView.$element);
-
-var dummyBuildAttemptsTable = new WK.BuildAttemptTableView(WK.DummyData.buildAttempts);
-var $details = $("#details");
-$details.append(dummyBuildAttemptsTable.$element);
+document.addEventListener("DOMContentLoaded", function() {
+var app = window.dashboardApp = new WK.PipelineViewController();
+// FIXME: set default time range.
 
 // FIXME: extract the histogram into a view that uses source data.
 
