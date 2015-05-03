@@ -24,6 +24,8 @@
  */
 
 WK.BuildAttemptTableView = function(attempts) {
+    WK.Object.call(this);
+
     this._attempts = attempts;
 
     // FIXME: we should probably sort these attempts, unless done elsewhere.
@@ -52,7 +54,7 @@ WK.BuildAttemptTableView = function(attempts) {
 }
 
 WK.BuildAttemptTableView.prototype = {
-    __proto__: BaseObject.prototype,
+    __proto__: WK.Object.prototype,
     constructor: WK.BuildAttemptTableView,
 
     get attempts()

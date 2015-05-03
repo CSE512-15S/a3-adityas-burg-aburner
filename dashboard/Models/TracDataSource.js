@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013, 2014 Apple Inc. All rights reserved.
+ * Copyright (C) 2015 University of Washington.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,7 +26,7 @@
 
 WK.TracDataSource = function(baseURL, options)
 {
-    BaseObject.call(this);
+    WK.Object.call(this);
 
     console.assert(baseURL);
 
@@ -35,7 +36,7 @@ WK.TracDataSource = function(baseURL, options)
     this.recordedCommits = []; // Will be sorted in ascending order.
 };
 
-BaseObject.addConstructorFunctions(WK.TracDataSource);
+WK.Object.addConstructorFunctions(WK.TracDataSource);
 
 WK.TracDataSource.NeedsAuthentication = "needsAuthentication";
 WK.TracDataSource.UpdateInterval = 45000; // 45 seconds
@@ -46,7 +47,7 @@ WK.TracDataSource.Event = {
 
 WK.TracDataSource.prototype = {
     constructor: WK.TracDataSource,
-    __proto__: BaseObject.prototype,
+    __proto__: WK.Object.prototype,
 
     // Public
 
@@ -91,8 +92,7 @@ WK.TracDataSource.prototype = {
 
         var today = new Date();
 
-        this._oldestHistoricalDate = today;
-        this._latestLoadedDate = today;
+        this._oldestHistoricalDate = this._latestLoadedDate = today;
 
         this._loadingHistoricalData = true;
         loadXML(this._xmlTimelineURLForDateRange(today, today), function(dataDocument) {

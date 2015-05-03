@@ -24,6 +24,8 @@
  */
 
 WK.PipelineViewController = function() {
+    WK.Object.call(this);
+
     // First, set up data sources.
     this._tracDataSource = new WK.TracDataSource("https://trac.webkit.org/");
     this._tracDataSource.addEventListener(WK.TracDataSource.Event.CommitsUpdated, this._commitDataUpdated, this);
@@ -71,7 +73,7 @@ WK.PipelineViewController = function() {
 }
 
 WK.PipelineViewController.prototype = {
-    __proto__: BaseObject.prototype,
+    __proto__: WK.Object.prototype,
     constructor: WK.PipelineViewController,
 
     // Public

@@ -24,6 +24,8 @@
  */
 
 WK.QueueDiagramView = function(representedObject) {
+    WK.Object.call(this);
+
     this.representedObject = representedObject;
 
     this.$element = $('<li class="queue"></li>');
@@ -33,7 +35,7 @@ WK.QueueDiagramView = function(representedObject) {
 }
 
 WK.QueueDiagramView.prototype = {
-    __proto__: BaseObject.prototype,
+    __proto__: WK.Object.prototype,
     constructor: WK.QueueDiagramView,
 
     get name()
