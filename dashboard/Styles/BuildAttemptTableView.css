@@ -18,6 +18,7 @@ table.build-attempts td,
 table.build-attempts th {
     padding: 6px;
     text-align: left;
+    vertical-align: middle;
 }
 
 table.build-attempts td:first-of-type,
