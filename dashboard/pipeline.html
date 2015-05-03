@@ -105,24 +105,7 @@
 <script type="text/template" id="BuildAttemptTableView-row">
 <tr>
 <td><span class="try-num"><%- view.try_num %></span></td>
-<td>
-<%
-    switch(view.result_type) {
-        case 'try':
-            print('&rarr;');
-            break;
-        case 'pass':
-            print('&rarrb;');
-            break;
-        case 'fail':
-            print('&larrb;');
-            break;
-        case 'abort':
-            print('&larr;');
-            break;
-    }
-%>
-</td>
+<td><img src="Images/arrow_<%= view.result_type %>.svg" alt="arrow <%= view.result_type %>"></td>
 <td><a href="<%= view.patch_url %>"><%- view.patch_name %></a></td>
 <td><%- view.start %></td>
 <td><%- view.duration %></td>
