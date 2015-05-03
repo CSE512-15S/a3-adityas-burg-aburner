@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 University of Washington.
+ * Copyright (C) 2013 Apple Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,43 +23,13 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.QueueDiagramView = function(queue) {
-    WK.Object.call(this);
-
-    console.assert(queue instanceof WK.PatchQueue, queue);
-    this.queue = queue;
-
-    this.$element = $('<li class="queue"></li>');
-
-    this._metrics = new WK.PatchQueueMetrics(queue, {'attempts': []}); // Start with nothing.
-}
-
-WK.QueueDiagramView.prototype = {
-    __proto__: WK.Object.prototype,
-    constructor: WK.QueueDiagramView,
-
-    get name()
-    {
-        return this.queue.name;
-    },
-
-    get queueMetrics()
-    {
-        return this._metrics;
-    },
-
-    set queueMetrics(value)
-    {
-        console.assert(value instanceof WK.PatchQueueMetrics, value);
-        this._metrics = value;
-        this.render();
-    },
-
-    render: function()
-    {
-        this.$element.append(WK.ViewTemplates.queueDiagramStart(this));
-        this.queueMetrics.attempts.forEach(function (attempt) {
-            this.$element.append(WK.ViewTemplates.queueDiagramAttempt(attempt));
-        }, this);
-    }
+WK.Platform = {
+    MacOSXYosemite: { name: "mac-os-x-yosemite", readableName: "OS X Yosemite", order: 10 },
+    MacOSXMavericks: { name: "mac-os-x-mavericks", readableName: "OS X Mavericks", order: 20 },
+    iOS8Device: { name: "ios-8", readableName: "iOS 8", order: 30 },
+    Windows8: { name: "windows-8", readableName: "Windows 8", order: 50 },
+    Windows7: { name: "windows-7", readableName: "Windows 7", order: 60 },
+    WindowsXP: { name: "windows-xp", readableName: "Windows XP", order: 70 },
+    LinuxGTK: { name : "linux-gtk", readableName: "Linux GTK", order: 90 },
+    LinuxEFL: { name: "linux-efl", readableName: "Linux EFL", order : 100 }
 };

@@ -30,8 +30,14 @@ WK.PipelineViewController = function() {
     this._tracDataSource = new WK.TracDataSource("https://trac.webkit.org/");
     this._tracDataSource.addEventListener(WK.TracDataSource.Event.CommitsUpdated, this._commitDataUpdated, this);
 
-    this.macQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.macQueue);
-    this.iosQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.iosQueue);
+    this._patchQueueDataSource = new WK.PatchQueueDataSource("https://webkit-queues.appspot.com/");
+
+    this.macQueue = this._patchQueueDataSource.queues["mac-wk2-ews"];
+    this.iosQueue = this._patchQueueDataSource.queues["ios-ews"];
+    this.queues = [this.macQueue, this.iosQueue];
+
+    this.macQueueDiagramView = new WK.QueueDiagramView(this.macQueue);
+    this.iosQueueDiagramView = new WK.QueueDiagramView(this.iosQueue);
 
     var pickerElement = this._pickerElement = document.createElement("span");
     pickerElement.id = "range-picker";
@@ -70,6 +76,11 @@ WK.PipelineViewController = function() {
     this.buildAttemptsTable = new WK.BuildAttemptTableView(WK.DummyData.buildAttempts);
     $detailsSection.append(this.buildAttemptsTable.$element);
     $("#content").append($detailsSection);
+
+    // Set up initial state.
+
+    // This is synced with the current time selection, but not any other filters.
+    this.patches = [];
 }
 
 WK.PipelineViewController.prototype = {
@@ -84,21 +95,67 @@ WK.PipelineViewController.prototype = {
         this._dateRangeChanged(startDate, endDate);
     },
 
+    get patches()
+    {
+        return this._patches.slice();
+    },
+
+    set patches(value)
+    {
+        if (!_.isArray(value))
+            return;
+
+        this._patches = value;
+        this._recomputeMetrics();
+    },
+
     // Private
 
     _dateRangeChanged: function(startDate, endDate)
     {
+        if (this._tracLoadingMessage) {
+            $(this._tracLoadingMessage).remove();
+            delete this._tracLoadingMessage;
+        }
+
+        if (this._queueLoadingMessage) {
+            $(this._queueLoadingMessage).remove();
+            delete this._queueLoadingMessage;
+        }
+
         this._tracDataSource.fetchCommitsForDateRange(startDate, endDate);
         this._tracLoadingMessage = $('<li>Loading commit metadata...</li>');
         $("ul.status-messages").append(this._tracLoadingMessage);
-        //var queues = unhiddenQueues().filter(function(queue) { return queue.builder || queue.tester; });
-        //analyzer.analyze(queues, picker.date1, endDate);
+
+        this._patchQueueDataSource.fetchPatchesForDateRange(startDate, endDate, this._processPatchPayload.bind(this));
+        this._queueLoadingMessage = $('<li>Loading patch queue data...</li>');
+        $("ul.status-messages").append(this._queueLoadingMessage);
     },
 
     _commitDataUpdated: function()
     {
         console.log("Fetched commits from trac: ", this._tracDataSource.recordedCommits);
-        $(this._tracLoadingMessage).remove();
-        delete this._tracLoadingMessage;
-    }
+
+        if (this._tracLoadingMessage) {
+            $(this._tracLoadingMessage).remove();
+            delete this._tracLoadingMessage;
+        }
+    },
+
+    _processPatchPayload: function(payload)
+    {
+        console.log("Fetched patches from queue server: ", payload);
+
+        if (this._queueLoadingMessage) {
+            $(this._queueLoadingMessage).remove();
+            delete this._queueLoadingMessage;
+        }
+    },
+
+    _recomputeMetrics: function()
+    {
+        // FIXME: use real data.
+        this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);
+        this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, WK.DummyData.iosQueueMetrics);
+    },
 };

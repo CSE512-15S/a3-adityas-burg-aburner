@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2014 Apple Inc. All rights reserved.
  * Copyright (C) 2015 University of Washington.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,43 +24,23 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.QueueDiagramView = function(queue) {
+WK.PatchQueueMetrics = function(patchQueue, data)
+{
     WK.Object.call(this);
 
-    console.assert(queue instanceof WK.PatchQueue, queue);
-    this.queue = queue;
+    console.assert(patchQueue instanceof WK.PatchQueue, patchQueue);
+    this.queue = patchQueue;
+    this.data = data;
+};
 
-    this.$element = $('<li class="queue"></li>');
+WK.Object.addConstructorFunctions(WK.PatchQueueMetrics);
 
-    this._metrics = new WK.PatchQueueMetrics(queue, {'attempts': []}); // Start with nothing.
-}
-
-WK.QueueDiagramView.prototype = {
+WK.PatchQueueMetrics.prototype = {
+    constructor: WK.PatchQueueMetrics,
     __proto__: WK.Object.prototype,
-    constructor: WK.QueueDiagramView,
 
-    get name()
+    get attempts()
     {
-        return this.queue.name;
-    },
-
-    get queueMetrics()
-    {
-        return this._metrics;
-    },
-
-    set queueMetrics(value)
-    {
-        console.assert(value instanceof WK.PatchQueueMetrics, value);
-        this._metrics = value;
-        this.render();
-    },
-
-    render: function()
-    {
-        this.$element.append(WK.ViewTemplates.queueDiagramStart(this));
-        this.queueMetrics.attempts.forEach(function (attempt) {
-            this.$element.append(WK.ViewTemplates.queueDiagramAttempt(attempt));
-        }, this);
+        return this.data.attempts;
     }
 };
