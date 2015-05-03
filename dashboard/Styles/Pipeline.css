@@ -30,24 +30,52 @@ body {
     color: #5C5C5C;
 }
 
-thead tr:first-of-type td {
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0px;
-}
-
-.content {
+#content {
     width: 1000px;
     margin: auto;
     position: relative;
 }
 
+#content > hr {
+    height: 2px;
+    border: none;
+    background-color: #9C9C9C;
+    margin: 20px 0px 40px;
+}
+
 h1 {
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
+#range-picker {
+    font-family: "HelveticaNeue-Light", sans-serif;
+    font-size: 14px;
+    color: rgb(89, 42, 120);
+    font-weight: bold;
+    line-height: 28px;
+    cursor: pointer;
+    background-color: rgb(228, 223, 233);
+    padding: 3px 10px;
+    border: 2px solid rgba(45, 0, 85, .5);
+    border-radius: 15px;
+}
+
+#range-picker:hover {
+    border-color: rgba(140, 10, 250, .5);
+    background-color: rgb(230, 220, 240);
+}
+
 /* Queue flow diagrams */
+
+.queue-container {
+    position: relative;
+}
+
+span.date-label {
+    font-size: 20px;
+    margin-right: 10px;
+}
 
 .legend {
     position: absolute;
@@ -55,7 +83,7 @@ h1 {
     right: 15px;
 }
 
-ul#queue-diagrams {
+ul.queue-diagrams {
     text-align: left;
     list-style-type: none;
 }

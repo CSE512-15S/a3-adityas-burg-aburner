@@ -49,6 +49,8 @@ WK.TracDataSource.prototype = {
     constructor: WK.TracDataSource,
     __proto__: BaseObject.prototype,
 
+    // Public
+
     get oldestRecordedRevisionNumber()
     {
         if (!this.recordedCommits.length)
@@ -76,7 +78,17 @@ WK.TracDataSource.prototype = {
         return this.baseURL + "changeset/" + encodeURIComponent(revision);
     },
 
-    _xmlTimelineURL: function(fromDate, toDate)
+    load: function(fromDate, toDate)
+    {
+        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), function(dataDocument) {
+            this._processTimelineData(dataDocument);
+            this.dispatchEventToListeners(WK.TracDataSource.Event.Loaded, [fromDate, toDate]);
+        }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
+    },
+
+    // Private
+
+    _xmlTimelineURLForDateRange: function(fromDate, toDate)
     {
         console.assert(fromDate <= toDate);
 
@@ -93,9 +105,8 @@ WK.TracDataSource.prototype = {
         var link = doc.evaluate("./link", commitElement, null, XPathResult.STRING_TYPE).stringValue;
         var revisionNumber = parseInt(/\d+$/.exec(link))
 
-        function tracNSResolver(prefix)
-        {
-            if (prefix == "dc")
+        function tracNSResolver(prefix) {
+            if (prefix === "dc")
                 return "http://purl.org/dc/elements/1.1/";
             return null;
         }
@@ -118,13 +129,13 @@ WK.TracDataSource.prototype = {
         // The feed contains a <title>, but it's not parsed as well as what we are getting from description.
         var title = document.createElement("div");
         var node = parsedDescription.firstChild ? parsedDescription.firstChild.firstChild : null;
-        while (node && node.tagName != "BR") {
+        while (node && node.tagName !== "BR") {
             title.appendChild(node.cloneNode(true));
             node = node.nextSibling;
         }
 
         // For some reason, trac titles start with a newline. Delete it.
-        if (title.firstChild && title.firstChild.nodeType == Node.TEXT_NODE && title.firstChild.textContent.length > 0 && title.firstChild.textContent[0] == "\n")
+        if (title.firstChild && title.firstChild.nodeType === Node.TEXT_NODE && title.firstChild.textContent.length > 0 && title.firstChild.textContent[0] == "\n")
             title.firstChild.textContent = title.firstChild.textContent.substring(1);
 
         var result = {
@@ -160,15 +171,15 @@ WK.TracDataSource.prototype = {
         return result;
     },
 
-    _loaded: function(dataDocument)
+    _processTimelineData: function(dataDocument)
     {
         if (!dataDocument)
             return;
 
-        var recordedRevisionNumbers = this.recordedCommits.reduce(function(previousResult, commit) {
-            previousResult[commit.revisionNumber] = commit;
-            return previousResult;
-        }, {});
+        var recordedRevisionNumbers = {};
+        _.each(this.recordedCommits, function(commit) {
+            recordedRevisionNumbers[commit.revisionNumber] = commit;
+        });
 
         var knownCommitsWereUpdated = false;
         var newCommits = [];
@@ -195,14 +206,6 @@ WK.TracDataSource.prototype = {
             this.dispatchEventToListeners(WK.TracDataSource.Event.CommitsUpdated, null);
     },
 
-    load: function(fromDate, toDate)
-    {
-        loadXML(this._xmlTimelineURL(fromDate, toDate), function(dataDocument) {
-            this._loaded(dataDocument);
-            this.dispatchEventToListeners(WK.TracDataSource.Event.Loaded, [fromDate, toDate]);
-        }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
-    },
-
     _update: function()
     {
         var fromDate = new Date(this._latestLoadedDate);
@@ -210,7 +213,7 @@ WK.TracDataSource.prototype = {
 
         this._latestLoadedDate = toDate;
 
-        loadXML(this._xmlTimelineURL(fromDate, toDate), this._loaded.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
+        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), this._processTimelineData.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
     },
 
     startPeriodicUpdates: function()
@@ -223,9 +226,9 @@ WK.TracDataSource.prototype = {
         this._latestLoadedDate = today;
 
         this._loadingHistoricalData = true;
-        loadXML(this._xmlTimelineURL(today, today), function(dataDocument) {
+        loadXML(this._xmlTimelineURLForDateRange(today, today), function(dataDocument) {
             this._loadingHistoricalData = false;
-            this._loaded(dataDocument);
+            this._processTimelineData(dataDocument);
         }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
 
         this.updateTimer = setInterval(this._update.bind(this), WK.TracDataSource.UpdateInterval);
@@ -246,9 +249,9 @@ WK.TracDataSource.prototype = {
         this._oldestHistoricalDate = fromDate;
 
         this._loadingHistoricalData = true;
-        loadXML(this._xmlTimelineURL(fromDate, toDate), function(dataDocument) {
+        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), function(dataDocument) {
             this._loadingHistoricalData = false;
-            this._loaded(dataDocument);
+            this._processTimelineData(dataDocument);
         }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
     },
 };

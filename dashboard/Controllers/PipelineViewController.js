@@ -27,16 +27,62 @@ WK.PipelineViewController = function() {
     this.macQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.macQueue);
     this.iosQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.iosQueue);
 
-    var $queueList = $("#queue-diagrams");
+    var pickerElement = this._pickerElement = document.createElement("span");
+    pickerElement.id = "range-picker";
+    pickerElement.size = 40;
+    pickerElement.textContent = "Please select a date range";
+    $(".date-selection").append(pickerElement);
+
+    $("#range-picker")
+    .dateRangePicker({
+        startOfWeek: navigator.language === "en-us" ? "sunday" : "monday",
+        endDate: new Date(),
+        showShortcuts: false,
+        getValue: function() { return this.textContent; },
+        setValue: function(value) { this.textContent = value; }
+    })
+    .on('datepicker-apply', function(event, picker) {
+        // This message is dispatched even when range hasn't been selected (or only one endpoint was),
+        // in which case the actual range hasn't changed, and there is nothing to do.
+        if (isNaN(picker.date1) || isNaN(picker.date2))
+            return;
+
+        var endDate = new Date(new Date(picker.date2).setDate(picker.date2.getDate() + 1));
+        this._dateRangeChanged(picker.date1, endDate)
+    }.bind(this));
+
+    var $queueList = $('<ul class="queue-diagrams"></ul>');
     $queueList.append(this.macQueueDiagramView.$element);
     $queueList.append(this.iosQueueDiagramView.$element);
+    $(".queue-container").append($queueList);
 
+    var $histogramSection = $('<div class="histograms" />');
+    // FIXME: insert the histogram building stuff here.
+    $("#content").append($histogramSection);
+
+    var $detailsSection = $('<div class="details" />');
     this.buildAttemptsTable = new WK.BuildAttemptTableView(WK.DummyData.buildAttempts);
-    var $details = $("#details");
-    $details.append(this.buildAttemptsTable.$element);
+    $detailsSection.append(this.buildAttemptsTable.$element);
+    $("#content").append($detailsSection);
 }
 
 WK.PipelineViewController.prototype = {
     __proto__: BaseObject.prototype,
     constructor: WK.PipelineViewController,
+
+    // Public
+
+    setDateRange: function(startDate, endDate)
+    {
+        $(this._pickerElement).data('dateRangePicker').setDateRange(startDate, endDate);
+    },
+
+    // Private
+
+    _dateRangeChanged: function(startDate, endDate)
+    {
+        var queues = unhiddenQueues().filter(function(queue) { return queue.builder || queue.tester; });
+        analyzer.analyze(queues, picker.date1, endDate);
+
+    }
 };
