@@ -66,6 +66,20 @@ h1 {
     background-color: rgb(230, 220, 240);
 }
 
+ul.status-messages {
+    list-style-type: none;
+}
+
+@keyframes dimmer {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+ul.status-messages li {
+    animation: dimmer 1s infinite;
+}
+
 /* Queue flow diagrams */
 
 .queue-container {

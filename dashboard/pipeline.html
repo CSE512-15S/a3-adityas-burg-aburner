@@ -39,7 +39,8 @@
 <div class="date-selection">
 <span class="date-label">Showing Patches in Range:</span>
 </div>
-
+<ul class="status-messages">
+</ul>
 <hr />
 
 <div class="queue-container">
@@ -231,7 +232,7 @@ WK.ViewTemplates = {
 
 document.addEventListener("DOMContentLoaded", function() {
 var app = window.dashboardApp = new WK.PipelineViewController();
-app.setDateRange(moment().subtract(7, 'days').toDate(), moment().toDate());
+app.setDateRange(moment().subtract(2, 'days').toDate(), moment().toDate());
 
 // FIXME: extract the histogram into a view that uses source data.
 

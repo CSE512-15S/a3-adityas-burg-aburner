@@ -42,7 +42,6 @@ WK.TracDataSource.UpdateInterval = 45000; // 45 seconds
 
 WK.TracDataSource.Event = {
     CommitsUpdated: "commits-updated",
-    Loaded: "loaded"
 };
 
 WK.TracDataSource.prototype = {
@@ -78,12 +77,51 @@ WK.TracDataSource.prototype = {
         return this.baseURL + "changeset/" + encodeURIComponent(revision);
     },
 
-    load: function(fromDate, toDate)
+    /* The main entry point, it takes two Date instances. */
+    fetchCommitsForDateRange: function(fromDate, toDate)
     {
         loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), function(dataDocument) {
             this._processTimelineData(dataDocument);
-            this.dispatchEventToListeners(WK.TracDataSource.Event.Loaded, [fromDate, toDate]);
-        }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
+        }.bind(this), this._needsAuthentication ? {withCredentials: true} : {});
+    },
+
+    startPeriodicUpdates: function()
+    {
+        console.assert(!this._oldestHistoricalDate);
+
+        var today = new Date();
+
+        this._oldestHistoricalDate = today;
+        this._latestLoadedDate = today;
+
+        this._loadingHistoricalData = true;
+        loadXML(this._xmlTimelineURLForDateRange(today, today), function(dataDocument) {
+            this._loadingHistoricalData = false;
+            this._processTimelineData(dataDocument);
+        }.bind(this), this._needsAuthentication ? {withCredentials: true} : {});
+
+        this.updateTimer = setInterval(this._update.bind(this), WK.TracDataSource.UpdateInterval);
+    },
+
+    loadMoreHistoricalData: function()
+    {
+        console.assert(this._oldestHistoricalDate);
+
+        if (this._loadingHistoricalData)
+            return;
+
+        // Load one more day of historical data.
+        var fromDate = new Date(this._oldestHistoricalDate);
+        fromDate.setDate(fromDate.getDate() - 1);
+        var toDate = new Date(fromDate);
+
+        this._oldestHistoricalDate = fromDate;
+
+        this._loadingHistoricalData = true;
+        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), function(dataDocument) {
+            this._loadingHistoricalData = false;
+            this._processTimelineData(dataDocument);
+        }.bind(this), this._needsAuthentication ? {withCredentials: true} : {});
     },
 
     // Private
@@ -213,45 +251,6 @@ WK.TracDataSource.prototype = {
 
         this._latestLoadedDate = toDate;
 
-        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), this._processTimelineData.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
-    },
-
-    startPeriodicUpdates: function()
-    {
-        console.assert(!this._oldestHistoricalDate);
-
-        var today = new Date();
-
-        this._oldestHistoricalDate = today;
-        this._latestLoadedDate = today;
-
-        this._loadingHistoricalData = true;
-        loadXML(this._xmlTimelineURLForDateRange(today, today), function(dataDocument) {
-            this._loadingHistoricalData = false;
-            this._processTimelineData(dataDocument);
-        }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
-
-        this.updateTimer = setInterval(this._update.bind(this), WK.TracDataSource.UpdateInterval);
-    },
-
-    loadMoreHistoricalData: function()
-    {
-        console.assert(this._oldestHistoricalDate);
-
-        if (this._loadingHistoricalData)
-            return;
-
-        // Load one more day of historical data.
-        var fromDate = new Date(this._oldestHistoricalDate);
-        fromDate.setDate(fromDate.getDate() - 1);
-        var toDate = new Date(fromDate);
-
-        this._oldestHistoricalDate = fromDate;
-
-        this._loadingHistoricalData = true;
-        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), function(dataDocument) {
-            this._loadingHistoricalData = false;
-            this._processTimelineData(dataDocument);
-        }.bind(this), this._needsAuthentication ? { withCredentials: true } : {});
+        loadXML(this._xmlTimelineURLForDateRange(fromDate, toDate), this._processTimelineData.bind(this), this._needsAuthentication ? {withCredentials: true} : {});
     },
 };

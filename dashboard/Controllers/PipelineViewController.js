@@ -24,6 +24,10 @@
  */
 
 WK.PipelineViewController = function() {
+    // First, set up data sources.
+    this._tracDataSource = new WK.TracDataSource("https://trac.webkit.org/");
+    this._tracDataSource.addEventListener(WK.TracDataSource.Event.CommitsUpdated, this._commitDataUpdated, this);
+
     this.macQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.macQueue);
     this.iosQueueDiagramView = new WK.QueueDiagramView(WK.DummyData.iosQueue);
 
@@ -75,14 +79,24 @@ WK.PipelineViewController.prototype = {
     setDateRange: function(startDate, endDate)
     {
         $(this._pickerElement).data('dateRangePicker').setDateRange(startDate, endDate);
+        this._dateRangeChanged(startDate, endDate);
     },
 
     // Private
 
     _dateRangeChanged: function(startDate, endDate)
     {
-        var queues = unhiddenQueues().filter(function(queue) { return queue.builder || queue.tester; });
-        analyzer.analyze(queues, picker.date1, endDate);
+        this._tracDataSource.fetchCommitsForDateRange(startDate, endDate);
+        this._tracLoadingMessage = $('<li>Loading commit metadata...</li>');
+        $("ul.status-messages").append(this._tracLoadingMessage);
+        //var queues = unhiddenQueues().filter(function(queue) { return queue.builder || queue.tester; });
+        //analyzer.analyze(queues, picker.date1, endDate);
+    },
 
+    _commitDataUpdated: function()
+    {
+        console.log("Fetched commits from trac: ", this._tracDataSource.recordedCommits);
+        $(this._tracLoadingMessage).remove();
+        delete this._tracLoadingMessage;
     }
 };
