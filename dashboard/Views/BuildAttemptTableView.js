@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2015 University of Washington.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,82 +23,40 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-body {
-    margin-top: 15px;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-    background-color: #E9E7DF;
-    color: #5C5C5C;
+WK.BuildAttemptTableView = function(attempts) {
+    this._attempts = attempts;
+
+    // FIXME: we should probably sort these attempts, unless done elsewhere.
+
+    var columns = [
+        {key: "try", label: "Try"},
+        {key: "result", label: "Result"},
+        {key: "patch", label: "Patch"},
+        {key: "start", label: "Start"},
+        {key: "duration", label: "Duration"},
+        {key: "author", label: "Author"},
+        {key: "description", label: "Bug description"},
+    ];
+
+    // FIXME: split into separate render() function.
+    var lines = [];
+    lines.push('<table class="build-attempts">');
+    lines.push('<thead><tr>');
+    columns.forEach(function(column) { lines.push('<th>' + column.label + '</th>') });
+    lines.push('</tr></thead><tbody>')
+    this._attempts.forEach(function(attempt) {
+        lines.push(WK.ViewTemplates.buildAttemptTableRow(attempt));
+    });
+    lines.push('</tbody></table>');
+    this.$element = $(lines.join(''));
 }
 
-thead tr:first-of-type td {
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0px;
-}
+WK.BuildAttemptTableView.prototype = {
+    __proto__: BaseObject.prototype,
+    constructor: WK.BuildAttemptTableView,
 
-.content {
-    width: 1000px;
-    margin: auto;
-    position: relative;
-}
-
-h1 {
-    margin-bottom: 32px;
-    text-align: center;
-}
-
-/* Queue flow diagrams */
-
-.legend {
-    position: absolute;
-    top: 31px;
-    right: 15px;
-}
-
-ul#queue-diagrams {
-    text-align: left;
-    list-style-type: none;
-}
-
-li.queue {
-    margin-bottom: 10px;
-    display: block;
-    /* Hack to clear spaces from between inline elements.
-       See: http://stackoverflow.com/questions/2628050/ignore-whitespace-in-html */
-    font-size: 0;
-}
-
-li.queue .queue-item {
-    display: inline-block;
-    height: 270px;
-    position: relative;
-}
-
-li.queue span.queue-label {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    right: 0;
-
-    text-align: center;
-    font-weight: bold;
-    font-size: 26px !important;
-}
-
-/* SVG */
-
-.bar rect {
-  fill: steelblue;
-  shape-rendering: crispEdges;
-}
-
-.bar text {
-  fill: #fff;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
+    get attempts()
+    {
+        return this._attempts.slice();
+    }
+};
