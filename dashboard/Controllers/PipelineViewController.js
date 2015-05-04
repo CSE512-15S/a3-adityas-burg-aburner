@@ -73,6 +73,15 @@ WK.PipelineViewController = function() {
     $queueList.append(this.iosQueueDiagramView.element);
     $(".queue-container").append($queueList);
 
+
+    // FIXME: testing out queue diagram selection event
+    WK.Object.addEventListener(
+        WK.QueueDiagramView.Event.SelectionChanged,
+        function (e) { console.log(e.data); },
+        this
+    );
+
+
     var $histogramSection = $('<div class="histograms" />');
     // FIXME: insert the histogram building stuff here.
     $("#content").append($histogramSection);

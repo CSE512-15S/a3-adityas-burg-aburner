@@ -200,3 +200,77 @@ table.queue-grid tr.platform.linux-efl img.logo {
 .popover-tracking:hover {
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2)
 }
+
+/**
+ * Queue diagram default styles
+ */
+.queue-attempt .line {
+    stroke-width: 4px;
+    fill: transparent;
+}
+.queue-attempt .line .arrow-head {
+    stroke-width: 2px;
+}
+.queue-attempt .line.try-path {
+    stroke: #4990E2;
+}
+.queue-attempt .line.try-path .arrow-head {
+    fill: #4990E2;
+}
+.queue-attempt .line.abort-path {
+    stroke: #979797;
+}
+.queue-attempt .line.abort-path .arrow-head {
+    fill: #979797;
+}
+.queue-attempt .line.pass-path {
+    stroke: #417505;
+}
+.queue-attempt .line.fail-path {
+    stroke: #830010;
+}
+.queue-attempt .label rect {
+    stroke: #D3D3D3;
+    stroke-width: 2px;
+    fill: #F6F4EC;
+    fill-opacity: 0.9;
+}
+.queue-attempt .center-circle circle {
+    stroke: #979797;
+    stroke-width: 4px;
+    fill: #F6F6F6;
+}
+.queue-attempt .center-circle text {
+    font-family: Helvetica;
+    font-size: 36px;
+    font-weight: bold;
+    fill: #4A4A4A;
+}
+
+/**
+ * Queue diagram active styles
+ */
+.queue-attempt .line path,
+.queue-attempt .label rect,
+.queue-attempt .label text tspan,
+.queue-attempt .center-circle circle,
+.queue-attempt .center-circle text tspan {
+    cursor: pointer;
+}
+.queue-attempt .line.selected {
+    stroke: #876E9D;
+}
+.queue-attempt .line.selected .arrow-head {
+    fill: #876E9D;
+}
+.queue-attempt .label.selected rect {
+    stroke: #876E9D;
+    fill: #E6DAF1;
+}
+.queue-attempt .center-circle.selected circle {
+    stroke: #876E9D;
+    fill: #EBEBEB;
+}
+.queue-attempt .center-circle.selected text {
+    fill: #5C4375;
+}
