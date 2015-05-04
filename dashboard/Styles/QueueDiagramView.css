@@ -75,20 +75,116 @@
 .queue-attempt .attempt-circle text tspan {
     cursor: pointer;
 }
-.queue-attempt .line.selected {
+
+/* Outcome: Pass */
+.queue-attempt.selected-pass .line.pass,
+.queue-attempt.selected-pass .line.attempt {
     stroke: #876E9D;
 }
-.queue-attempt .line.selected .arrow-head {
+.queue-attempt.selected-pass .line.pass .arrow-head,
+.queue-attempt.selected-pass .line.attempt .arrow-head {
     fill: #876E9D;
 }
-.queue-attempt .label.selected rect {
+.queue-attempt.selected-pass .line:not(.pass, .attempt) {
+    opacity: 0.5;
+}
+.queue-attempt.selected-pass .label.pass rect,
+.queue-attempt.selected-pass .label.attempt rect {
     stroke: #876E9D;
     fill: #E6DAF1;
 }
-.queue-attempt .attempt-circle.selected circle {
+.queue-attempt.selected-pass .label:not(.pass, .attempt) {
+    opacity: 0.5;
+}
+
+/* Outcome: Fail */
+.queue-attempt.selected-fail .line.fail,
+.queue-attempt.selected-fail .line.attempt {
+    stroke: #876E9D;
+}
+.queue-attempt.selected-fail .line.fail .arrow-head,
+.queue-attempt.selected-fail .line.attempt .arrow-head {
+    fill: #876E9D;
+}
+.queue-attempt.selected-fail .line:not(.fail, .attempt) {
+    opacity: 0.5;
+}
+.queue-attempt.selected-fail .label.fail rect,
+.queue-attempt.selected-fail .label.attempt rect {
+    stroke: #876E9D;
+    fill: #E6DAF1;
+}
+.queue-attempt.selected-fail .label:not(.fail, .attempt) {
+    opacity: 0.5;
+}
+
+/* Outcome: Abort */
+.queue-attempt.selected-abort .line.abort,
+.queue-attempt.selected-abort .line.attempt {
+    stroke: #876E9D;
+}
+.queue-attempt.selected-abort .line.abort .arrow-head,
+.queue-attempt.selected-abort .line.attempt .arrow-head {
+    fill: #876E9D;
+}
+.queue-attempt.selected-abort .line:not(.abort, .attempt) {
+    opacity: 0.5;
+}
+.queue-attempt.selected-abort .label.abort rect,
+.queue-attempt.selected-abort .label.attempt rect {
+    stroke: #876E9D;
+    fill: #E6DAF1;
+}
+.queue-attempt.selected-abort .label:not(.abort, .attempt) {
+    opacity: 0.5;
+}
+
+/* Outcome: Attempt (selected circle) */
+
+.queue-attempt.selected-attempt .line.attempt {
+    stroke: #876E9D;
+}
+.queue-attempt.selected-attempt .line.attempt .arrow-head {
+    fill: #876E9D;
+}
+.queue-attempt.selected-attempt .label.attempt rect {
+    stroke: #876E9D;
+    fill: #E6DAF1;
+}
+
+/* Pass-through (only select retry and circle) */
+
+.queue-attempt.selected-through .line.attempt {
+    stroke: #876E9D;
+}
+.queue-attempt.selected-through .line.attempt .arrow-head {
+    fill: #876E9D;
+}
+.queue-attempt.selected-through .label.attempt rect {
+    stroke: #876E9D;
+    fill: #E6DAF1;
+}
+.queue-attempt.selected-through .line:not(.attempt) {
+    opacity: 0.5;
+}
+.queue-attempt.selected-through .label:not(.attempt) {
+    opacity: 0.5;
+}
+
+/* Just use mega-rules for the circles. */
+
+.queue-attempt.selected-pass .attempt-circle circle,
+.queue-attempt.selected-fail .attempt-circle circle,
+.queue-attempt.selected-abort .attempt-circle circle,
+.queue-attempt.selected-through .attempt-circle circle,
+.queue-attempt.selected-attempt .attempt-circle circle {
     stroke: #876E9D;
     fill: #EBEBEB;
 }
-.queue-attempt .attempt-circle.selected text {
+.queue-attempt.selected-pass .attempt-circle text,
+.queue-attempt.selected-fail .attempt-circle text,
+.queue-attempt.selected-abort .attempt-circle text,
+.queue-attempt.selected-through .attempt-circle text,
+.queue-attempt.selected-attempt .attempt-circle text {
     fill: #5C4375;
 }

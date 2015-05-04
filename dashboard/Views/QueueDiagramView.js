@@ -60,7 +60,7 @@ WK.QueueDiagramView.prototype = {
     {
         console.assert(value instanceof WK.PatchQueueMetrics, value);
         this._metrics = value;
-        this.renderShorter();
+        this.render();
     },
 
     clearSelection: function()
@@ -68,16 +68,16 @@ WK.QueueDiagramView.prototype = {
         this._selectedAttemptCount = null;
         this._selectedOutcome = null
 
-        // TODO: change classes.
+        this._clearSelectionClasses();
         this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionCleared);
     },
 
     setSelection: function(ordinal, outcome)
     {
         console.assert(ordinal >= 0);
+        console.assert(outcome);
 
         ordinal = Math.min(ordinal, 3);
-        outcome = outcome || null;
 
         // Re-selecting with cmd+click should clear.
         if (ordinal === this._selectedAttemptCount && outcome === this._selectedOutcome) {
@@ -89,7 +89,28 @@ WK.QueueDiagramView.prototype = {
         this._selectedAttemptCount = ordinal;
         this._selectedOutcome = outcome;
 
-        // TODO: change classes.
+        // Update styles.
+        this._clearSelectionClasses();
+
+        var selectedAttemptClassName = null;
+        if (outcome === WK.PatchAttempt.Outcome.Pass)
+            selectedAttemptClassName = "selected-pass";
+        else if (outcome === WK.PatchAttempt.Outcome.Fail)
+            selectedAttemptClassName = "selected-fail";
+        else if (outcome === WK.PatchAttempt.Outcome.Abort)
+            selectedAttemptClassName = "selected-abort";
+        else if (outcome === WK.PatchAttempt.Outcome.Retry)
+            selectedAttemptClassName = "selected-attempt";
+        else
+            console.error("unknown outcome: ", outcome);
+
+        for (var i = 0; i <= ordinal; ++i) {
+            var attempt = this._attemptElements[i];
+            if (i < ordinal)
+                attempt.classList.add("selected-through");
+            else
+                attempt.classList.add(selectedAttemptClassName);
+        }
 
         this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionChanged);
     },
@@ -104,13 +125,11 @@ WK.QueueDiagramView.prototype = {
         return this._selectedAttemptCount;
     },
 
-    renderShorter: function()
+    render: function()
     {
         function elementClicked(event) {
             var target = event.target;
-            console.log("click event", event);
             if (this._startElement === target.enclosingNodeOrSelfWithClass("queue-start")) {
-                console.log("clicked inside start", this._startElement);
                 this.clearSelection();
                 return;
             }
@@ -122,11 +141,9 @@ WK.QueueDiagramView.prototype = {
             if (ordinal === -1)
                 return;
 
-            console.log("clicked inside attempt", enclosingSegment);
-
             var enclosingCircle = target.enclosingNodeOrSelfWithClass("attempt-circle");
             if (enclosingCircle) {
-                this.setSelection(ordinal);
+                this.setSelection(ordinal, WK.PatchAttempt.Outcome.Retry);
                 return;
             }
 
@@ -146,6 +163,7 @@ WK.QueueDiagramView.prototype = {
 
             if (!outcome)
                 return;
+
             this.setSelection(ordinal, outcome);
         }
 
@@ -164,159 +182,19 @@ WK.QueueDiagramView.prototype = {
         }, this);
     },
 
-    render: function()
-    {
-        this.element.removeChildren();
-        this.element.appendChild($(WK.ViewTemplates.queueDiagramStart(this)).get(0));
-        this.queueMetrics.attempts.forEach(function (attempt, index) {
-            var self = this;
-
-            var $attempt = $(WK.ViewTemplates.queueDiagramAttempt(attempt));
-            this.element.appendChild($attempt.get(0));
-
-            //
-            // handle attempt element selections
-            //
-
-            // track selection states
-            var isSelected = {
-                circle: false,
-                attemptPath: false,
-                abortPath: false,
-                passPath: false,
-                failPath: false
-            };
-
-            // need jQuery objects for event listeners
-            var $circle = $attempt.find('.attempt-circle');
-            var $attemptPath = $attempt.find('.attempt-path');
-            var $abortPath = $attempt.find('.abort-path');
-            var $passPath = $attempt.find('.pass-path');
-            var $failPath = $attempt.find('.fail-path');
-
-            // need native svg elements for class manipulation (-__-)
-            var circleEl = $circle.get(0);
-            var attemptPathEls = $attemptPath.get();
-            var abortPathEls = $abortPath.get();
-            var passPathEls = $passPath.get();
-            var failPathEls = $failPath.get();
-
-            // check if attempt/abort/pass/fail selected
-            function isAnyPathSelected() {
-                return (isSelected.attemptPath ||
-                        isSelected.abortPath ||
-                        isSelected.passPath ||
-                        isSelected.failPath);
-            }
-
-            // decide whether attempt circle is selected
-            function updateCircleSelect() {
-                if (isAnyPathSelected()) {
-                    isSelected.circle = true;
-                    lunar.addClass(circleEl, 'selected');
-                } else {
-                    isSelected.circle = false;
-                    lunar.removeClass(circleEl, 'selected');
-                }
-            }
-
-            // change a class on an array of svgs
-            function changeClass(svgEls, action, className) {
-                var method = action + 'Class';
-                svgEls.forEach(function (svgEl) {
-                    lunar[method](svgEl, className);
-                });
-            }
-
-            // select all paths
-            function selectAllPaths() {
-                isSelected.attemptPath = true;
-                isSelected.abortPath = true;
-                isSelected.passPath = true;
-                isSelected.failPath = true;
-                changeClass(attemptPathEls, 'add', 'selected');
-                changeClass(abortPathEls, 'add', 'selected');
-                changeClass(passPathEls, 'add', 'selected');
-                changeClass(failPathEls, 'add', 'selected');
-            }
-
-            // unselect all paths
-            function unselectAllPaths() {
-                isSelected.attemptPath = false;
-                isSelected.abortPath = false;
-                isSelected.passPath = false;
-                isSelected.failPath = false;
-                changeClass(attemptPathEls, 'remove', 'selected');
-                changeClass(abortPathEls, 'remove', 'selected');
-                changeClass(passPathEls, 'remove', 'selected');
-                changeClass(failPathEls, 'remove', 'selected');
-            }
-
-            // dispatch state change event
-            function dispatchSelectEvent() {
-                self.dispatchEventToListeners(
-                    WK.QueueDiagramView.Event.SelectionChanged,
-                    {
-                        attempt: attempt,
-                        isSelected: isSelected
-                    }
-                );
-            }
-
-            // toggle attempt path
-            $attemptPath.find('*').on('click', function (e) {
-                e.stopPropagation();
-                isSelected.attemptPath = !isSelected.attemptPath;
-                changeClass(attemptPathEls, 'toggle', 'selected');
-                updateCircleSelect();
-                dispatchSelectEvent();
-            });
-
-            // toggle abort path
-            $abortPath.find('*').on('click', function (e) {
-                e.stopPropagation();
-                isSelected.abortPath = !isSelected.abortPath;
-                changeClass(abortPathEls, 'toggle', 'selected');
-                updateCircleSelect();
-                dispatchSelectEvent();
-            });
-
-            // toggle pass path
-            $passPath.find('*').on('click', function (e) {
-                e.stopPropagation();
-                isSelected.passPath = !isSelected.passPath;
-                changeClass(passPathEls, 'toggle', 'selected');
-                updateCircleSelect();
-                dispatchSelectEvent();
-            });
-
-            // toggle fail path
-            $failPath.find('*').on('click', function (e) {
-                e.stopPropagation();
-                isSelected.failPath = !isSelected.failPath;
-                changeClass(failPathEls, 'toggle', 'selected');
-                updateCircleSelect();
-                dispatchSelectEvent();
-            });
-
-            // toggle all paths
-            $circle.find('*').on('click', function (e) {
-                e.stopPropagation();
-                if (isSelected.circle) {
-                    unselectAllPaths();
-                    isSelected.circle = false;
-                    lunar.removeClass(circleEl, 'selected');
-                } else {
-                    selectAllPaths();
-                    isSelected.circle = true;
-                    lunar.addClass(circleEl, 'selected');
-                }
-                dispatchSelectEvent();
-            });
-
-        }, this);
-    },
-
     // Private
 
+    _clearSelectionClasses: function()
+    {
+        function clearClasses(element) {
+            element.classList.remove("selected-pass");
+            element.classList.remove("selected-fail");
+            element.classList.remove("selected-abort");
+            element.classList.remove("selected-attempt");
+            element.classList.remove("selected-through");
+        }
+
+        clearClasses(this._startElement);
+        _.map(this._attemptElements, clearClasses);
+    }
 };
