@@ -65,7 +65,7 @@ WK.PatchQueueMetrics.prototype = {
 
             var adjustedCount = data.count;
             if (outcome === WK.PatchAttempt.Outcome.Retry) {
-                for (var i = ordinal + 1; i <= 3; ++i) {
+                for (var i = ordinal; i <= 3; ++i) {
                     for (var key in WK.PatchAttempt.Outcome) {
                         adjustedCount += this.getData(i, WK.PatchAttempt.Outcome[key]).count;
                     }
