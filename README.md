@@ -13,9 +13,11 @@ Our visualization is an exploratory tool for analyzing data from bots running We
 
 ![Old dashboard](https://raw.githubusercontent.com/CSE512-15S/a3-adityas-burg-aburner/master/old-dash.png)
 
-Our visualization is designed to graphically represent the testing process, showing the flow of patch test attempts as the come from the queue and are run by bots multiple times against system builds. The different outcomes (pass, fail, abort, and retry) are represented by arrows, which we label with percentages from the patch test data. This queue flow diagram can be used as a selection tool, to choose a subset of the test results data for displaying in D3 histograms and a details table below.
+Our visualization is designed to graphically represent the testing process, showing the flow of patch test attempts as the come from the queue and are run by bots multiple times against system builds. The different outcomes (pass, fail, abort, and retry) are represented by arrows, which we label with percentages from the patch test data:
 
 ![Our dashboard](https://raw.githubusercontent.com/CSE512-15S/a3-adityas-burg-aburner/master/our-dash.png)
+
+The views are linked: the queue flow diagram can be used as a selection tool to choose a subset of the patch test results. This subset will be displayed in both D3 histograms and a details table below.
 
 ## Running Instructions
 
@@ -41,6 +43,8 @@ TODO: If you put your work online, please also write a [one-line description and
 
 2. At first we planned to include Author and Bug Description columns in the patch results details table. However these would require separate XML API calls per each patch. We decided this would take too long to load, and so those columns are left out of our final submission. (This data depends on an upgrade of the WebKit project's Bugzilla bug tracker.)
 
+3. We wanted to be able to select ranges in the histogram, updating the details table (linking and brushing). However we did not have time to complete this complex of an interaction task.
+
 
 ## Development Process
 
@@ -55,7 +59,7 @@ TODO: If you put your work online, please also write a [one-line description and
  - implemented the attempts table
  - worked on first version of diagram selection model
  - project documentation
- 
+
 ### Aditya
  - created the histogram views
 
