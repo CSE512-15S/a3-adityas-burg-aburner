@@ -44,6 +44,8 @@ WK.PipelineViewController = function() {
     this.macQueueDiagramView = new WK.QueueDiagramView(this.macQueue);
     this.iosQueueDiagramView = new WK.QueueDiagramView(this.iosQueue);
 
+    this.histogramView = new WK.OutcomeHistogramsView(this);
+
     this.diagrams = [
         this.macQueueDiagramView,
         this.iosQueueDiagramView,
@@ -81,8 +83,7 @@ WK.PipelineViewController = function() {
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionChanged, this._queueDiagramSelectionChanged, this);
 
     var $histogramSection = $('<div class="histograms" />');
-    // FIXME: insert the histogram building stuff here.
-    $("#content").append($histogramSection);
+    $("#content").append(this.histogramView.element);
 
     var $detailsSection = $('<div class="details" />');
     this._buildAttemptsTable = new WK.BuildAttemptTableView(this);
