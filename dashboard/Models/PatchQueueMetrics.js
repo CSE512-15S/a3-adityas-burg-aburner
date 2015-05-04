@@ -24,23 +24,23 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchQueueMetrics = function(patchQueue, data)
+WK.PatchQueueMetrics = function(patchQueue, allAttempts, dummyData)
 {
     WK.Object.call(this);
 
     console.assert(patchQueue instanceof WK.PatchQueue, patchQueue);
     this.queue = patchQueue;
-    this.data = data;
-};
+    this._attempts = _.filter(allAttempts, function(attempt) {
+        return attempt.queueId === patchQueue.id;
+    });
 
-WK.Object.addConstructorFunctions(WK.PatchQueueMetrics);
+    // FIXME: remove
+    this._dummyData = dummyData || {'attempts': []};
+};
 
 WK.PatchQueueMetrics.prototype = {
     constructor: WK.PatchQueueMetrics,
     __proto__: WK.Object.prototype,
 
-    get attempts()
-    {
-        return this.data.attempts;
-    }
+    get attempts() { return this._dummyData.attempts; }
 };

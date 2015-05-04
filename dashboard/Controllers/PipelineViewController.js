@@ -146,7 +146,7 @@ WK.PipelineViewController.prototype = {
 
     get selectedPatches()
     {
-        return this._selectedPatches.slice();
+        return this._selectedPatches;
     },
 
     set selectedPatches(value)
@@ -160,9 +160,14 @@ WK.PipelineViewController.prototype = {
         this._recomputePatchAttempts();
     },
 
+    get allAttempts()
+    {
+        return this._allAttempts || [];
+    },
+
     get selectedAttempts()
     {
-        return this._selectedAttempts.slice();
+        return this._selectedAttempts;
     },
 
     set selectedAttempts(value)
@@ -194,16 +199,6 @@ WK.PipelineViewController.prototype = {
 
         this._startDate = startDate;
         this._endDate = endDate;
-
-        if (this._tracLoadingMessage) {
-            $(this._tracLoadingMessage).remove();
-            delete this._tracLoadingMessage;
-        }
-
-        if (this._queueLoadingMessage) {
-            $(this._queueLoadingMessage).remove();
-            delete this._queueLoadingMessage;
-        }
 
         this._tracDataSource.fetchCommitsForDateRange(this._startDate, this._endDate);
         this._patchQueueDataSource.fetchPatchResultsForDateRange(this._startDate, this._endDate, this._patchResultsReceived.bind(this));
@@ -256,27 +251,30 @@ WK.PipelineViewController.prototype = {
         // FIXME: these should be derived from various view selections.
         var filters = [];
         var composedFilters = _.compose.apply(filters);
-        var attempts = [];
+        var allAttempts = [];
+        var selectedAttempts = [];
         _.each(this.selectedPatches, function(patch) {
             if (!patch.results)
                 return;
 
             for (var i = 0; i < patch.results.attempts.length; ++i) {
                 var attempt = patch.results.attempts[i];
+                allAttempts.push(attempt);
+
                 if (filters.length && composedFilters(attempt))
                     continue;
 
-                attempts.push(attempt);
-
+                selectedAttempts.push(attempt);
             }
         }, this);
 
-        this.selectedAttempts = attempts;
+        this._allAttempts = allAttempts;
+        this.selectedAttempts = selectedAttempts;
     },
 
     _recomputePatchMetrics: function()
     {
-        // FIXME: use this.selectedAttempts.
+        // FIXME: remove dummyAttempts, generate from real data.
         // This will require data format changes in the view: the bug metadata
         // (name, author) in the table needs to be manually joined from Bugzilla.
         this.attemptsTableView.attempts = this.selectedAttempts;
@@ -284,8 +282,7 @@ WK.PipelineViewController.prototype = {
 
         this._queueContainerElement.classList.remove("hidden");
 
-        // FIXME: use real metrics computed from this.selectedAttempts filtered by queue.
-        this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);
-        this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, WK.DummyData.iosQueueMetrics);
+        this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, this.allAttempts, WK.DummyData.macQueueMetrics);
+        this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, this.allAttempts, WK.DummyData.iosQueueMetrics);
     },
 };
