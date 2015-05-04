@@ -45,6 +45,7 @@ WK.PipelineViewController = function() {
     this.iosQueueDiagramView = new WK.QueueDiagramView(this.iosQueue);
 
     this.histogramView = new WK.OutcomeHistogramsView(this);
+    this.attemptsTableView = new WK.BuildAttemptTableView(this);
 
     this.diagrams = [
         this.macQueueDiagramView,
@@ -75,22 +76,24 @@ WK.PipelineViewController = function() {
         this._dateRangeChanged(picker.date1, endDate)
     }.bind(this));
 
-    var $queueList = $('<ul class="queue-diagrams"></ul>');
-    $queueList.append(this.macQueueDiagramView.element);
-    $queueList.append(this.iosQueueDiagramView.element);
-    $(".queue-container").append($queueList);
+    var queueListElement = this._queueListElement = document.createElement("ul");
+    queueListElement.className = "queue-diagrams";
+    queueListElement.appendChild(this.macQueueDiagramView.element);
+    queueListElement.appendChild(this.iosQueueDiagramView.element);
+    $(".queue-container").append(queueListElement);
 
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionChanged, this._queueDiagramSelectionChanged, this);
+    WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionCleared, this._queueDiagramSelectionCleared, this);
 
-    var $histogramSection = $('<div class="histograms" />');
-    $("#content").append(this.histogramView.element);
-
-    var $detailsSection = $('<div class="details" />');
-    this._buildAttemptsTable = new WK.BuildAttemptTableView(this);
-    $detailsSection.append(this._buildAttemptsTable.element);
-    $("#content").append($detailsSection);
+    var detailsSectionElement = this._detailsSectionElement = document.createElement("div");
+    detailsSectionElement.className = "details hidden";
+    detailsSectionElement.appendChild(this.histogramView.element);
+    detailsSectionElement.appendChild(this.attemptsTableView.element);
+    $("#content").append(detailsSectionElement);
 
     // Set up initial state.
+
+    this._selectedDiagram = null;
 
     // This is synced with the current time selection, but not any other filters.
     this._selectedPatches = [];
@@ -106,6 +109,25 @@ WK.PipelineViewController.prototype = {
     {
         $(this._pickerElement).data('dateRangePicker').setDateRange(startDate, endDate);
         this._dateRangeChanged(startDate, endDate);
+    },
+
+    get selectedDiagram()
+    {
+        return this._selectedDiagram;
+    },
+
+    set selectedDiagram(value)
+    {
+        console.assert(!value || value instanceof WK.QueueDiagramView, value);
+
+        _.each(this.diagrams, function(diagram) {
+            if (diagram !== value)
+                diagram.clearSelection();
+        });
+
+        this._selectedDiagram = value;
+        var hasAnySelection = value && (value.selectedOutcome !== null || value.selectedAttemptCount !== null);
+        this._detailsSectionElement.classList.toggle("hidden", !hasAnySelection);
     },
 
     get selectedPatches()
@@ -207,14 +229,16 @@ WK.PipelineViewController.prototype = {
         this.selectedPatches = selectedPatches;
     },
 
+    _queueDiagramSelectionCleared: function(event)
+    {
+        if (this.selectedDiagram === event.target)
+            this.selectedDiagram = null;
+    },
+
     _queueDiagramSelectionChanged: function(event)
     {
-        _.each(this.diagrams, function(diagram) {
-            if (event.target !== diagram)
-                diagram.clearSelection();
-        });
-
         var diagram = event.target;
+        this.selectedDiagram = diagram;
         console.log("Selection changed:", diagram, diagram.selectedAttemptCount, diagram.selectedOutcome);
     },
 
@@ -246,8 +270,8 @@ WK.PipelineViewController.prototype = {
         // FIXME: use this.selectedAttempts.
         // This will require data format changes in the view: the bug metadata
         // (name, author) in the table needs to be manually joined from Bugzilla.
-        this._buildAttemptsTable.attempts = this.selectedAttempts;
-        this._buildAttemptsTable.dummyAttempts = WK.DummyData.buildAttempts;
+        this.attemptsTableView.attempts = this.selectedAttempts;
+        this.attemptsTableView.dummyAttempts = WK.DummyData.buildAttempts;
 
         // FIXME: use real metrics computed from this.selectedAttempts filtered by queue.
         this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);

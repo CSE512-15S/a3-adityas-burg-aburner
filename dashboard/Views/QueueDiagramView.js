@@ -65,8 +65,11 @@ WK.QueueDiagramView.prototype = {
 
     clearSelection: function()
     {
+        if (this._selectedAttemptCount === null && this._selectedOutcome === null)
+            return;
+
         this._selectedAttemptCount = null;
-        this._selectedOutcome = null
+        this._selectedOutcome = null;
 
         this._clearSelectionClasses();
         this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionCleared);
@@ -129,62 +132,63 @@ WK.QueueDiagramView.prototype = {
 
     render: function()
     {
-        function elementClicked(event) {
-            var target = event.target;
-            if (this._startElement === target.enclosingNodeOrSelfWithClass("queue-start")) {
-                this.clearSelection();
-                return;
-            }
-            var enclosingSegment = target.enclosingNodeOrSelfWithClass("queue-attempt");
-            if (!enclosingSegment)
-                return;
-
-            var ordinal = this._attemptElements.indexOf(enclosingSegment);
-            if (ordinal === -1)
-                return;
-
-            var enclosingCircle = target.enclosingNodeOrSelfWithClass("attempt-circle");
-            if (enclosingCircle) {
-                this.setSelection(ordinal, WK.PatchAttempt.Outcome.Retry);
-                return;
-            }
-
-            var enclosingArrowOrLabel = target.enclosingNodeOrSelfWithClass("outcome");
-            if (!enclosingArrowOrLabel)
-                return;
-
-            var outcome = null;
-            if (enclosingArrowOrLabel.classList.contains("pass"))
-                outcome = WK.PatchAttempt.Outcome.Pass;
-            else if (enclosingArrowOrLabel.classList.contains("fail"))
-                outcome = WK.PatchAttempt.Outcome.Fail;
-            else if (enclosingArrowOrLabel.classList.contains("abort"))
-                outcome = WK.PatchAttempt.Outcome.Abort;
-            else if (enclosingArrowOrLabel.classList.contains("attempt"))
-                outcome = WK.PatchAttempt.Outcome.Retry;
-
-            if (!outcome)
-                return;
-
-            this.setSelection(ordinal, outcome);
-        }
-
         this.element.removeChildren();
 
         this._startElement = $(WK.ViewTemplates.queueDiagramStart(this)).get(0);
-        this._startElement.addEventListener("click", elementClicked.bind(this));
+        this._startElement.addEventListener("click", this._diagramSegmentClicked.bind(this));
         this.element.appendChild(this._startElement);
 
         this._attemptElements = [];
         _.each(this.queueMetrics.attempts, function(attempt, index) {
             var attemptElement = $(WK.ViewTemplates.queueDiagramAttempt(attempt)).get(0);
-            attemptElement.addEventListener("click", elementClicked.bind(this));
+            attemptElement.addEventListener("click", this._diagramSegmentClicked.bind(this));
             this._attemptElements.push(attemptElement);
             this.element.appendChild(attemptElement);
         }, this);
     },
 
     // Private
+
+    _diagramSegmentClicked: function(event)
+    {
+        var target = event.target;
+        if (this._startElement === target.enclosingNodeOrSelfWithClass("queue-start")) {
+            this.clearSelection();
+            return;
+        }
+        var enclosingSegment = target.enclosingNodeOrSelfWithClass("queue-attempt");
+        if (!enclosingSegment)
+            return;
+
+        var ordinal = this._attemptElements.indexOf(enclosingSegment);
+        if (ordinal === -1)
+            return;
+
+        var enclosingCircle = target.enclosingNodeOrSelfWithClass("attempt-circle");
+        if (enclosingCircle) {
+            this.setSelection(ordinal, WK.PatchAttempt.Outcome.Retry);
+            return;
+        }
+
+        var enclosingArrowOrLabel = target.enclosingNodeOrSelfWithClass("outcome");
+        if (!enclosingArrowOrLabel)
+            return;
+
+        var outcome = null;
+        if (enclosingArrowOrLabel.classList.contains("pass"))
+            outcome = WK.PatchAttempt.Outcome.Pass;
+        else if (enclosingArrowOrLabel.classList.contains("fail"))
+            outcome = WK.PatchAttempt.Outcome.Fail;
+        else if (enclosingArrowOrLabel.classList.contains("abort"))
+            outcome = WK.PatchAttempt.Outcome.Abort;
+        else if (enclosingArrowOrLabel.classList.contains("attempt"))
+            outcome = WK.PatchAttempt.Outcome.Retry;
+
+        if (!outcome)
+            return;
+
+        this.setSelection(ordinal, outcome);
+    },
 
     _clearSelectionClasses: function()
     {
