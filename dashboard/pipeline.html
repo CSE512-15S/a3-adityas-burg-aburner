@@ -13,6 +13,7 @@
     <script src="External/moment.min.js"></script>
     <script src="External/jquery.daterangepicker.js"></script>
     <script src="External/d3.min.js"></script>
+    <script src="External/lunar.min.js"></script>
 
     <script>
         window.WK = {};
@@ -143,26 +144,26 @@
 <div class="queue-item queue-attempt">
 <svg width="191px" height="270px" viewBox="0 0 191 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- pass line -->
-    <g transform="translate(146, 50)" stroke-width="4" stroke="#417505" fill="transparent">
+    <g class="pass-path line" transform="translate(146, 50)">
         <path d="M11.6177078,52 L11.6177079,0.106315613 L0.98959976,0.106315613 L16.2685848,0.106315613 L23.0104002,0.106315613" ></path>
     </g>
     <!-- fail line -->
-    <g transform="translate(146, 166)" stroke-width="4" stroke="#830010" fill="transparent">
+    <g class="fail-path line" transform="translate(146, 166)">
         <path d="M11.6177078,51.8936844 L11.6177079,7.10542736e-15 L0.98959976,8.40699522e-15 L16.2685848,8.40699522e-15 L23.0104002,8.40699522e-15" transform="translate(12, 25.946842) scale(1, -1) translate(-12, -25.946842) "></path>
     </g>
     <!-- abort line -->
-    <g transform="translate(88, 155)" stroke="#979797" fill="transparent">
-        <path d="M37.5595972,0.650981549 C45.6827916,5.02429358 53.2284229,14.1092189 45.8063474,22.1841615 C38.3842719,30.2591041 8.28363611,39.3434157 8.28363611,39.3434157" stroke-width="4" ></path>
-        <path d="M8.08769176,34.0883591 C7.86635346,33.5805994 7.43467643,33.5427764 7.12944456,33.995091 L0.662997921,43.577537 C0.35511091,44.0337862 0.54964366,44.4036492 1.10561167,44.4036492 L11.5841533,44.4036491 C12.1364891,44.4036491 12.4041394,43.9904773 12.1834773,43.4842689 L8.08769176,34.0883591 Z" fill="#9B9B9B" transform="translate(6.394867, 39.082669) rotate(3) translate(-6.394867, -39.082669) "></path>
+    <g class="abort-path line" transform="translate(88, 155)">
+        <path d="M37.5595972,0.650981549 C45.6827916,5.02429358 53.2284229,14.1092189 45.8063474,22.1841615 C38.3842719,30.2591041 8.28363611,39.3434157 8.28363611,39.3434157"></path>
+        <path class="arrow-head" d="M8.08769176,34.0883591 C7.86635346,33.5805994 7.43467643,33.5427764 7.12944456,33.995091 L0.662997921,43.577537 C0.35511091,44.0337862 0.54964366,44.4036492 1.10561167,44.4036492 L11.5841533,44.4036491 C12.1364891,44.4036491 12.4041394,43.9904773 12.1834773,43.4842689 L8.08769176,34.0883591 Z" transform="translate(6.394867, 39.082669) rotate(3) translate(-6.394867, -39.082669) "></path>
     </g>
-    <!-- attempt line -->
-    <g transform="translate(-1, 128)" stroke="#4990E2" fill="transparent">
-        <path d="M110.572612,0.673767889 C110.350113,0.16834785 109.974974,0.155047863 109.729751,0.654164119 L104.755861,10.7777993 C104.51286,11.2723925 104.764711,11.6733395 105.320409,11.6733395 L114.410358,11.6733394 C114.965151,11.6733394 115.234348,11.263208 115.012029,10.7581955 L110.572612,0.673767889 Z" fill="#4990E2" transform="translate(109.875314, 5.986958) rotate(91) translate(-109.875314, -5.986958) "></path>
-        <path d="M0.643792344,6 L106.597398,6" stroke-width="4" ></path>
+    <!-- try line -->
+    <g class="try-path line" transform="translate(-1, 128)">
+        <path class="arrow-head" d="M110.572612,0.673767889 C110.350113,0.16834785 109.974974,0.155047863 109.729751,0.654164119 L104.755861,10.7777993 C104.51286,11.2723925 104.764711,11.6733395 105.320409,11.6733395 L114.410358,11.6733394 C114.965151,11.6733394 115.234348,11.263208 115.012029,10.7581955 L110.572612,0.673767889 Z" transform="translate(109.875314, 5.986958) rotate(91) translate(-109.875314, -5.986958) "></path>
+        <path d="M0.643792344,6 L106.597398,6"></path>
     </g>
     <!-- pass label -->
-    <g transform="translate(128, 10)">
-        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"></rect>
+    <g class="pass-path label" transform="translate(128, 10)">
+        <rect x="0" y="0.3625" width="58" height="32.075" rx="8"></rect>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
             <tspan text-anchor="middle" x="29" y="14"><%= view.pass.percent %></tspan>
         </text>
@@ -171,8 +172,8 @@
         </text>
     </g>
     <!-- fail label -->
-    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(128, 224)">
-        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+    <g class="fail-path label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(128, 224)">
+        <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
             <tspan text-anchor="middle" x="29" y="14"><%= view.fail.percent %></tspan>
         </text>
@@ -181,8 +182,8 @@
         </text>
     </g>
     <!-- abort label -->
-    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(23, 194)">
-        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+    <g class="abort-path label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(23, 194)">
+        <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
             <tspan text-anchor="middle" x="29" y="14"><%= view.abort.percent %></tspan>
         </text>
@@ -191,8 +192,8 @@
         </text>
     </g>
     <!-- attempt label -->
-    <g xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(22, 117)">
-        <rect stroke="#D3D3D3" stroke-width="2" fill-opacity="0.9" fill="#F6F4EC" x="0" y="0.3625" width="58" height="32.075" rx="8"/>
+    <g class="try-path label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(22, 117)">
+        <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
             <tspan text-anchor="middle" x="29" y="14"><%= view.attempt.percent %></tspan>
         </text>
@@ -201,9 +202,9 @@
         </text>
     </g>
     <!-- attempt number circle -->
-    <g transform="translate(125, 102)">
-        <circle stroke="#979797" stroke-width="4" fill="#F6F6F6" cx="32" cy="32" r="32"></circle>
-        <text font-family="Helvetica" font-size="36" font-weight="bold" fill="#4A4A4A">
+    <g class="center-circle" transform="translate(125, 102)">
+        <circle cx="32" cy="32" r="32"></circle>
+        <text>
             <tspan text-anchor="middle" x="32" y="44"><%= view.name %></tspan>
         </text>
     </g>
