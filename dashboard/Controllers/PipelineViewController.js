@@ -200,14 +200,15 @@ WK.PipelineViewController.prototype = {
         this._startDate = startDate;
         this._endDate = endDate;
 
-        this._tracDataSource.fetchCommitsForDateRange(this._startDate, this._endDate);
+        // This isn't being used, so disable for now.
+        //this._tracDataSource.fetchCommitsForDateRange(this._startDate, this._endDate);
+        //this.element.classList.add("loading-commits");
+
         this._patchQueueDataSource.fetchPatchResultsForDateRange(this._startDate, this._endDate, this._patchResultsReceived.bind(this));
+        this.element.classList.add("loading-patches");
 
         if (this.selectedDiagram)
             this.selectedDiagram.clearSelection();
-
-        this.element.classList.add("loading-patches");
-        this.element.classList.add("loading-commits");
     },
 
     _commitDataUpdated: function()
