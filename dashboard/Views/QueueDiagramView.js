@@ -104,7 +104,7 @@ WK.QueueDiagramView.prototype = {
         else
             console.error("unknown outcome: ", outcome);
 
-        for (var i = 0; i <= this._attemptElements.length; ++i) {
+        for (var i = 0; i < this._attemptElements.length; ++i) {
             var attempt = this._attemptElements[i];
             if (i < ordinal)
                 attempt.classList.add("selected-through");
