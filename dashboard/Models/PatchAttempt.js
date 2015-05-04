@@ -23,7 +23,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDuration, resultText)
+WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDuration, resolution)
 {
     WK.Object.call(this);
 
@@ -33,12 +33,7 @@ WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDurat
     this.waitDuration = waitDuration;
     /* attempt duration = total duration / (retries + 1) */
     this.processDuration = processDuration;
-
-    if (ordinal > 0)
-        this.outcome = WK.PatchAttempt.Outcome.Retry;
-    else
-        this.outcome = outcomeFromResultText(resultText);
-    }
+    this.outcome = outcomeFromResultText(resolution);
 
     function outcomeFromResultText(text) {
         switch (text) {
@@ -51,6 +46,7 @@ WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDurat
         case "in progress": return WK.PatchAttempt.Outcome.Pending;
         }
         return null;
+    }
 };
 
 WK.PatchAttempt.prototype = {

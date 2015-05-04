@@ -87,8 +87,8 @@ WK.PipelineViewController = function() {
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionChanged, this._queueDiagramSelectionChanged, this);
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionCleared, this._queueDiagramSelectionCleared, this);
 
-    var detailsSectionElement = this._detailsSectionElement = document.createElement("div");
-    detailsSectionElement.className = "details hidden";
+    var detailsSectionElement = this._detailsSectionElement= document.getElementsByClassName("details")[0];
+    detailsSectionElement.classList.add("hidden");
     detailsSectionElement.appendChild(this.histogramView.element);
     detailsSectionElement.appendChild(this.attemptsTableView.element);
 
