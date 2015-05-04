@@ -62,7 +62,8 @@ To use the visualization:
  - project documentation
 
 ### Aditya
- - created the linked histogram views
+ - created and linked histogram views
+ - added tooltip interaction and processing time summaries
 
 ### Overall
  - our application took roughly 25 man hours to complete
