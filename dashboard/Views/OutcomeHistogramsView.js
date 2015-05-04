@@ -23,6 +23,15 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+function secondsToString(totalSeconds){
+	var minutes = totalSeconds / 60;
+	var seconds = totalSeconds % 60;
+
+	var timeString = minutes.toFixed(0) +"m " + seconds.toFixed(0) +"s "; //String.format("%02d:%02d:%02d", hours, minutes, seconds);
+	
+	return timeString;
+}
+
 WK.OutcomeHistogramsView = function(delegate) {
     WK.Object.call(this);
 
@@ -58,8 +67,12 @@ WK.OutcomeHistogramsView.prototype = {
     {
         this.element.removeChildren();
 
-        //if (!this.queueMetrics)
-            //return;
+        if (!this.queueMetrics)
+             return;
+
+		// alert("Quque Metrics");
+		// console.log("Quque Metrics");
+		// console.log(this.queueMetrics.getSummaryForOutcome(WK.PatchAttempt.Outcome.Pass));
 
         // Generate a Bates distribution of 10 random variables.
 		var num_histograms = 3;
@@ -67,9 +80,9 @@ WK.OutcomeHistogramsView.prototype = {
         // A formatter for counts.
         var formatCount = d3.format(",.0f");
 
-        var margin = {top: 10, right: 30, bottom: 30, left: 30},
+        var margin = {top: 10, right: 30, bottom: 140, left: 30},
             width = 1000/num_histograms - margin.left - margin.right,
-            height = 200 - margin.top - margin.bottom;
+            height = 300 - margin.top - margin.bottom;
 			
 			//width/= num_histograms;
 		
@@ -79,9 +92,28 @@ WK.OutcomeHistogramsView.prototype = {
 		for(var i =0; i< num_histograms; i++)
 		{
 			var values = d3.range(1000).map(d3.random.bates(10));
-
+			
+			var outcomeSummary;
+			
+			switch(i)
+			{
+				case 0: outcomeSummary = this.queueMetrics.getSummaryForOutcome(WK.PatchAttempt.Outcome.Pass); 
+						break;
+				case 1: outcomeSummary = this.queueMetrics.getSummaryForOutcome(WK.PatchAttempt.Outcome.Fail); 
+						break;
+				case 2: outcomeSummary = this.queueMetrics.getSummaryForOutcome(WK.PatchAttempt.Outcome.Abort); 
+						break;	
+			}
+			
+			values = outcomeSummary.process_times;
+			
+			var max = Math.max.apply(null, values);
+			
+			if(max <= 0)
+				max = 1;
+			
 	        var x = d3.scale.linear()
-	            .domain([0, 1])
+	            .domain([0, max])
 	            .range([0, width]);
 
 	        // Generate a histogram using twenty uniformly-spaced bins.
@@ -156,7 +188,49 @@ WK.OutcomeHistogramsView.prototype = {
 	            .attr("class", "y axis")
 	            .attr("transform", "translate("+0+",0)")
 	            .call(yAxis);
-	
+				
+			switch(i)
+			{
+				case 0: svg.append("text")
+						.attr("y", height + 40)
+						.attr("x", width/4 + 30)
+						.attr("class","label")
+						.text("Time to Pass")
+						break;
+				case 1: svg.append("text")
+						.attr("y", height + 40)
+						.attr("x", width/4 + 30)
+						.attr("class","label")
+						.text("Time to Fail")
+						break;
+				case 2: svg.append("text")
+						.attr("y", height + 40)
+						.attr("x", width/4 + 30)
+						.attr("class","label")
+						.text("Time to Abort")
+						break;
+			}
+			
+			svg.append("text")
+			.attr("y", height + 80)
+			.attr("x", 60)
+			.attr("class","label")
+			.text("Median:    " + secondsToString(outcomeSummary.process_med))
+
+			svg.append("text")
+			.attr("y", height + 100)
+			.attr("x", 60)
+			.attr("class","label")
+			.text("Average:   " + secondsToString(outcomeSummary.process_avg))
+
+
+			svg.append("text")
+			.attr("y", height + 120)
+			.attr("x", 60)
+			.attr("class","labelslow")
+			.text("Slowest:   " + secondsToString(outcomeSummary.process_max))
+				
+		
 		}
     }
 };
