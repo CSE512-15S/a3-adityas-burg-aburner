@@ -56,6 +56,25 @@ WK.PatchQueueMetrics.prototype = {
         return metrics[label];
     },
 
+    getSummaryForOutcome: function(outcome)
+    {
+        var durations = [];
+        for (var i = 1; i <= 3; ++i) {
+            var data = this.getData(i, outcome);
+            durations = durations.concat(data.processing_times);
+        }
+
+        console.log(durations);
+
+        return {
+            process_times: durations,
+            process_avg: durations.average(),
+            process_med: durations.median(),
+            process_max: _.max(durations),
+            count: durations.length,
+        };
+    },
+
     getSummaryForAttempt: function(ordinal)
     {
         var totalData = this.metrics["all"];
