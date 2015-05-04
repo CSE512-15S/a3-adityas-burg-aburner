@@ -78,7 +78,7 @@ WK.PipelineViewController = function() {
     $("#content").append($histogramSection);
 
     var $detailsSection = $('<div class="details" />');
-    this._buildAttemptsTable = new WK.BuildAttemptTableView();
+    this._buildAttemptsTable = new WK.BuildAttemptTableView(this);
     $detailsSection.append(this._buildAttemptsTable.element);
     $("#content").append($detailsSection);
 
@@ -114,7 +114,31 @@ WK.PipelineViewController.prototype = {
 
         this._selectedPatches = value;
         this._recomputePatchAttempts();
+    },
+
+    get selectedAttempts()
+    {
+        return this._selectedAttempts.slice();
+    },
+
+    set selectedAttempts(value)
+    {
+        if (!_.isArray(value))
+            return;
+
+        console.log("Selected attempts changed: ", value);
+
+        this._selectedAttempts = value;
         this._recomputePatchMetrics();
+
+    },
+
+    getPatchForId: function(patchId)
+    {
+        if (!this.allPatches.has(patchId))
+            this.allPatches.set(patchId, new WK.Patch(patchId));
+
+        return this.allPatches.get(patchId);
     },
 
     // Private
@@ -167,7 +191,7 @@ WK.PipelineViewController.prototype = {
 
         var selectedPatches = [];
         _.each(patchResults, function(result) {
-            var patch = this._getPatchForId(result.patchId);
+            var patch = this.getPatchForId(result.patchId);
             patch.results = result;
             selectedPatches.push(patch);
         }, this);
@@ -177,26 +201,37 @@ WK.PipelineViewController.prototype = {
 
     _recomputePatchAttempts: function()
     {
-        // FIXME: get real PatchAttempt objects from the Patch.
-        // This will require data format changes in the view:
-        // * the bug metadata needs to be manually joined from Bugzilla
-        // * we don't know the actual processing time per attempt, just total time.
-        //   this would be trivial to include on the backend, but we can't change that. :-(
-        this._buildAttemptsTable.attempts = WK.DummyData.buildAttempts;
+        // FIXME: these should be derived from various view selections.
+        var filters = [];
+        var composedFilters = _.compose.apply(filters);
+        var attempts = [];
+        _.each(this.selectedPatches, function(patch) {
+            if (!patch.results)
+                return;
+
+            for (var i = 0; i < patch.results.attempts.length; ++i) {
+                var attempt = patch.results.attempts[i];
+                if (filters.length && composedFilters(attempt))
+                    continue;
+
+                attempts.push(attempt);
+
+            }
+        }, this);
+
+        this.selectedAttempts = attempts;
     },
 
     _recomputePatchMetrics: function()
     {
-        // FIXME: use real data.
+        // FIXME: use this.selectedAttempts.
+        // This will require data format changes in the view: the bug metadata
+        // (name, author) in the table needs to be manually joined from Bugzilla.
+        this._buildAttemptsTable.attempts = this.selectedAttempts;
+        this._buildAttemptsTable.dummyAttempts = WK.DummyData.buildAttempts;
+
+        // FIXME: use real metrics computed from this.selectedAttempts filtered by queue.
         this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);
         this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, WK.DummyData.iosQueueMetrics);
-    },
-
-    _getPatchForId: function(patchId)
-    {
-        if (!this.allPatches.has(patchId))
-            this.allPatches.set(patchId, new WK.Patch(patchId));
-
-        return this.allPatches.get(patchId);
     },
 };

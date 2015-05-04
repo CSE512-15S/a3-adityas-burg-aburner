@@ -23,8 +23,12 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.BuildAttemptTableView = function() {
+WK.BuildAttemptTableView = function(delegate) {
     WK.Object.call(this);
+
+    // NOTE: use this to obtain a WK.Patch object by its id:
+    //     this._delegate.getPatchById(...);
+    this._delegate = delegate;
 
     var columns = [
         {key: "try", label: "Try"},
@@ -48,8 +52,10 @@ WK.BuildAttemptTableView = function() {
     });
     this._tbodyElement = document.createElement("tbody");
     table.appendChild(this._tbodyElement);
+
     // Set up initial state.
     this.attempts = [];
+    this.dummyAttempts = [];
 }
 
 WK.BuildAttemptTableView.prototype = {
@@ -67,6 +73,21 @@ WK.BuildAttemptTableView.prototype = {
             return;
 
         this._attempts = value;
+        // FIXME: remove dummyAttempts once we can render from this instead.
+        //this.render();
+    },
+
+    get dummyAttempts()
+    {
+        return this._dummyAttempts.slice();
+    },
+
+    set dummyAttempts(value)
+    {
+        if (!_.isArray(value))
+            return;
+
+        this._dummyAttempts = value;
         this.render();
     },
 
@@ -74,7 +95,7 @@ WK.BuildAttemptTableView.prototype = {
     {
         this._tbodyElement.removeChildren();
 
-        this._attempts.forEach(function(attempt) {
+        this._dummyAttempts.forEach(function(attempt) {
             var $row = $(WK.ViewTemplates.buildAttemptTableRow(attempt));
             this._tbodyElement.appendChild($row[0]);
         }, this);

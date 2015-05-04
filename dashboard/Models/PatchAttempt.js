@@ -23,21 +23,45 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchResult = function(patchId, results)
+WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDuration, resultText)
 {
     WK.Object.call(this);
 
     this.patchId = patchId;
-    this.attempts = [];
-    for (var queueId in results) {
-        var queueResult = results[queueId];
-        var adjustedProcessDuration = parseInt(queueResult.process_duration) / (queueResult.retry_count + 1);
-        for (var i = 0; i <= queueResult.retry_count; ++i)
-            this.attempts.push(new WK.PatchAttempt(patchId, queueId, i + 1, queueResult.wait_duration, adjustedProcessDuration, queueResult.final_message))
+    this.ordinal = ordinal;
+    this.waitDuration = waitDuration;
+    /* attempt duration = total duration / (retries + 1) */
+    this.processDuration = processDuration;
+
+    if (ordinal > 0)
+        this.outcome = WK.PatchAttempt.Outcome.Retry;
+    else
+        this.outcome = outcomeFromResultText(resultText);
     }
+
+    function outcomeFromResultText(text) {
+        switch (text) {
+        case "pass": return WK.PatchAttempt.Outcome.Pass;
+        case "fail": return WK.PatchAttempt.Outcome.Pass;
+        case "retry": return WK.PatchAttempt.Outcome.Retry;
+        case "not processed": return WK.PatchAttempt.Outcome.Abort;
+        case "could not apply": return WK.PatchAttempt.Outcome.Abort;
+        case "internal error": return WK.PatchAttempt.Outcome.Error;
+        case "in progress": return WK.PatchAttempt.Outcome.Pending;
+        }
+        return null;
 };
 
-WK.PatchResult.prototype = {
-    constructor: WK.PatchResult,
+WK.PatchAttempt.prototype = {
+    constructor: WK.PatchAttempt,
     __proto__: WK.Object.prototype,
 };
+
+WK.PatchAttempt.Outcome = {
+    Pass: "patch-attempt-pass",
+    Fail: "patch-attempt-fail",
+    Retry: "patch-attempt-retry",
+    Abort: "patch-attempt-abort",
+    Error: "patch-attempt-error",
+    Pending: "patch-attempt-pending"
+}
