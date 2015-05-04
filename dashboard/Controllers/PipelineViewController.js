@@ -39,7 +39,7 @@ WK.PipelineViewController = function() {
     this.queues.set(this.macQueue.id, this.macQueue);
     this.queues.set(this.iosQueue.id, this.iosQueue);
 
-    this.patches = new Map;
+    this.allPatches = new Map;
 
     this.macQueueDiagramView = new WK.QueueDiagramView(this.macQueue);
     this.iosQueueDiagramView = new WK.QueueDiagramView(this.iosQueue);
@@ -85,7 +85,7 @@ WK.PipelineViewController = function() {
     // Set up initial state.
 
     // This is synced with the current time selection, but not any other filters.
-    this.selectedPatches = [];
+    this._selectedPatches = [];
 }
 
 WK.PipelineViewController.prototype = {
@@ -100,17 +100,19 @@ WK.PipelineViewController.prototype = {
         this._dateRangeChanged(startDate, endDate);
     },
 
-    get patchResults()
+    get selectedPatches()
     {
-        return this._patchResults.slice();
+        return this._selectedPatches.slice();
     },
 
-    set patchResults(value)
+    set selectedPatches(value)
     {
         if (!_.isArray(value))
             return;
 
-        this._patchResults = value;
+        console.log("Selected patches changed: ", value);
+
+        this._selectedPatches = value;
         this._recomputePatchAttempts();
         this._recomputePatchMetrics();
     },
@@ -163,11 +165,14 @@ WK.PipelineViewController.prototype = {
             delete this._queueLoadingMessage;
         }
 
+        var selectedPatches = [];
         _.each(patchResults, function(result) {
-            // FIXME: create new WK.Patch if necessary, and attach this result to it.
-            // Then, recompute attempts and metrics for each queue.
+            var patch = this._getPatchForId(result.patchId);
+            patch.results = result;
+            selectedPatches.push(patch);
         }, this);
-        this.patchResults = patchResults;
+
+        this.selectedPatches = selectedPatches;
     },
 
     _recomputePatchAttempts: function()
@@ -185,5 +190,13 @@ WK.PipelineViewController.prototype = {
         // FIXME: use real data.
         this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);
         this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, WK.DummyData.iosQueueMetrics);
+    },
+
+    _getPatchForId: function(patchId)
+    {
+        if (!this.allPatches.has(patchId))
+            this.allPatches.set(patchId, new WK.Patch(patchId));
+
+        return this.allPatches.get(patchId);
     },
 };

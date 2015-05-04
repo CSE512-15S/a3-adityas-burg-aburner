@@ -23,10 +23,11 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchResult = function(data)
+WK.PatchResult = function(patchId, data)
 {
     WK.Object.call(this);
 
+    this.patchId = patchId;
     this._data = data;
 };
 
