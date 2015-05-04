@@ -21,7 +21,7 @@ The views are linked: the queue flow diagram can be used as a selection tool to 
 
 ## Running Instructions
 
-Access our visualization at http://cse512-15s.github.io/a3-adityas-burg-aburner/pipeline.html or download this repository and open `pipeline.html`.
+Access our visualization at http://cse512-15s.github.io/a3-adityas-burg-aburner/ or download this repository and open `dashboard/pipeline.html`.
 
 To use the visualization:
 
