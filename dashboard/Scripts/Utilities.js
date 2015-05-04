@@ -135,6 +135,17 @@ Node.prototype.isSelfOrDescendant = function(node)
     return !!node && (node === this || this.isDescendant(node));
 }
 
+Object.defineProperty(Node.prototype, "enclosingNodeOrSelfWithClass",
+{
+    value: function(className)
+    {
+        for (var node = this; node && node !== this.ownerDocument; node = node.parentNode)
+            if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains(className))
+                return node;
+        return null;
+    }
+});
+
 Element.prototype.removeChildren = function()
 {
     // This has been tested to be the fastest removal method.

@@ -35,7 +35,10 @@ WK.QueueDiagramView = function(queue) {
     this.queueMetrics = new WK.PatchQueueMetrics(queue, {'attempts': []}); // Start with nothing.
 }
 
+WK.Object.addConstructorFunctions(WK.QueueDiagramView);
+
 WK.QueueDiagramView.Event = {
+    SelectionCleared: "selection-cleared",
     SelectionChanged: "selection-changed"
 };
 
@@ -57,7 +60,108 @@ WK.QueueDiagramView.prototype = {
     {
         console.assert(value instanceof WK.PatchQueueMetrics, value);
         this._metrics = value;
-        this.render();
+        this.renderShorter();
+    },
+
+    clearSelection: function()
+    {
+        this._selectedAttemptCount = null;
+        this._selectedOutcome = null
+
+        // TODO: change classes.
+        this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionCleared);
+    },
+
+    setSelection: function(ordinal, outcome)
+    {
+        console.assert(ordinal >= 0);
+
+        ordinal = Math.min(ordinal, 3);
+        outcome = outcome || null;
+
+        // Re-selecting with cmd+click should clear.
+        if (ordinal === this._selectedAttemptCount && outcome === this._selectedOutcome) {
+            if (event.metaKey)
+                this.clearSelection();
+            return;
+        }
+
+        this._selectedAttemptCount = ordinal;
+        this._selectedOutcome = outcome;
+
+        // TODO: change classes.
+
+        this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionChanged);
+    },
+
+    get selectedOutcome()
+    {
+        return this._selectedOutcome;
+    },
+
+    get selectedAttemptCount()
+    {
+        return this._selectedAttemptCount;
+    },
+
+    renderShorter: function()
+    {
+        function elementClicked(event) {
+            var target = event.target;
+            console.log("click event", event);
+            if (this._startElement === target.enclosingNodeOrSelfWithClass("queue-start")) {
+                console.log("clicked inside start", this._startElement);
+                this.clearSelection();
+                return;
+            }
+            var enclosingSegment = target.enclosingNodeOrSelfWithClass("queue-attempt");
+            if (!enclosingSegment)
+                return;
+
+            var ordinal = this._attemptElements.indexOf(enclosingSegment);
+            if (ordinal === -1)
+                return;
+
+            console.log("clicked inside attempt", enclosingSegment);
+
+            var enclosingCircle = target.enclosingNodeOrSelfWithClass("attempt-circle");
+            if (enclosingCircle) {
+                this.setSelection(ordinal);
+                return;
+            }
+
+            var enclosingArrowOrLabel = target.enclosingNodeOrSelfWithClass("outcome");
+            if (!enclosingArrowOrLabel)
+                return;
+
+            var outcome = null;
+            if (enclosingArrowOrLabel.classList.contains("pass"))
+                outcome = WK.PatchAttempt.Outcome.Pass;
+            else if (enclosingArrowOrLabel.classList.contains("fail"))
+                outcome = WK.PatchAttempt.Outcome.Fail;
+            else if (enclosingArrowOrLabel.classList.contains("abort"))
+                outcome = WK.PatchAttempt.Outcome.Abort;
+            else if (enclosingArrowOrLabel.classList.contains("attempt"))
+                outcome = WK.PatchAttempt.Outcome.Retry;
+
+            if (!outcome)
+                return;
+            this.setSelection(ordinal, outcome);
+        }
+
+        this.element.removeChildren();
+
+        this._startElement = $(WK.ViewTemplates.queueDiagramStart(this)).get(0);
+        this._startElement.addEventListener("click", elementClicked.bind(this));
+        this.element.appendChild(this._startElement);
+
+        this._attemptElements = [];
+        _.each(this.queueMetrics.attempts, function(attempt, index) {
+            var attemptElement = $(WK.ViewTemplates.queueDiagramAttempt(attempt)).get(0);
+            attemptElement.addEventListener("click", elementClicked.bind(this));
+            this._attemptElements.push(attemptElement);
+            this.element.appendChild(attemptElement);
+        }, this);
     },
 
     render: function()
@@ -68,7 +172,6 @@ WK.QueueDiagramView.prototype = {
             var self = this;
 
             var $attempt = $(WK.ViewTemplates.queueDiagramAttempt(attempt));
-
             this.element.appendChild($attempt.get(0));
 
             //
@@ -78,35 +181,35 @@ WK.QueueDiagramView.prototype = {
             // track selection states
             var isSelected = {
                 circle: false,
-                tryPath: false,
+                attemptPath: false,
                 abortPath: false,
                 passPath: false,
                 failPath: false
             };
 
             // need jQuery objects for event listeners
-            var $circle = $attempt.find('.center-circle');
-            var $tryPath = $attempt.find('.try-path');
+            var $circle = $attempt.find('.attempt-circle');
+            var $attemptPath = $attempt.find('.attempt-path');
             var $abortPath = $attempt.find('.abort-path');
             var $passPath = $attempt.find('.pass-path');
             var $failPath = $attempt.find('.fail-path');
 
             // need native svg elements for class manipulation (-__-)
             var circleEl = $circle.get(0);
-            var tryPathEls = $tryPath.get();
+            var attemptPathEls = $attemptPath.get();
             var abortPathEls = $abortPath.get();
             var passPathEls = $passPath.get();
             var failPathEls = $failPath.get();
 
-            // check if try/abort/pass/fail selected
+            // check if attempt/abort/pass/fail selected
             function isAnyPathSelected() {
-                return (isSelected.tryPath ||
+                return (isSelected.attemptPath ||
                         isSelected.abortPath ||
                         isSelected.passPath ||
                         isSelected.failPath);
             }
 
-            // decide whether center circle is selected
+            // decide whether attempt circle is selected
             function updateCircleSelect() {
                 if (isAnyPathSelected()) {
                     isSelected.circle = true;
@@ -127,11 +230,11 @@ WK.QueueDiagramView.prototype = {
 
             // select all paths
             function selectAllPaths() {
-                isSelected.tryPath = true;
+                isSelected.attemptPath = true;
                 isSelected.abortPath = true;
                 isSelected.passPath = true;
                 isSelected.failPath = true;
-                changeClass(tryPathEls, 'add', 'selected');
+                changeClass(attemptPathEls, 'add', 'selected');
                 changeClass(abortPathEls, 'add', 'selected');
                 changeClass(passPathEls, 'add', 'selected');
                 changeClass(failPathEls, 'add', 'selected');
@@ -139,11 +242,11 @@ WK.QueueDiagramView.prototype = {
 
             // unselect all paths
             function unselectAllPaths() {
-                isSelected.tryPath = false;
+                isSelected.attemptPath = false;
                 isSelected.abortPath = false;
                 isSelected.passPath = false;
                 isSelected.failPath = false;
-                changeClass(tryPathEls, 'remove', 'selected');
+                changeClass(attemptPathEls, 'remove', 'selected');
                 changeClass(abortPathEls, 'remove', 'selected');
                 changeClass(passPathEls, 'remove', 'selected');
                 changeClass(failPathEls, 'remove', 'selected');
@@ -160,11 +263,11 @@ WK.QueueDiagramView.prototype = {
                 );
             }
 
-            // toggle try path
-            $tryPath.find('*').on('click', function (e) {
+            // toggle attempt path
+            $attemptPath.find('*').on('click', function (e) {
                 e.stopPropagation();
-                isSelected.tryPath = !isSelected.tryPath;
-                changeClass(tryPathEls, 'toggle', 'selected');
+                isSelected.attemptPath = !isSelected.attemptPath;
+                changeClass(attemptPathEls, 'toggle', 'selected');
                 updateCircleSelect();
                 dispatchSelectEvent();
             });
@@ -212,5 +315,8 @@ WK.QueueDiagramView.prototype = {
             });
 
         }, this);
-    }
+    },
+
+    // Private
+
 };

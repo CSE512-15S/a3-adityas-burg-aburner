@@ -44,6 +44,11 @@ WK.PipelineViewController = function() {
     this.macQueueDiagramView = new WK.QueueDiagramView(this.macQueue);
     this.iosQueueDiagramView = new WK.QueueDiagramView(this.iosQueue);
 
+    this.diagrams = [
+        this.macQueueDiagramView,
+        this.iosQueueDiagramView,
+    ];
+
     var pickerElement = this._pickerElement = document.createElement("span");
     pickerElement.id = "range-picker";
     pickerElement.size = 40;
@@ -73,14 +78,7 @@ WK.PipelineViewController = function() {
     $queueList.append(this.iosQueueDiagramView.element);
     $(".queue-container").append($queueList);
 
-
-    // FIXME: testing out queue diagram selection event
-    WK.Object.addEventListener(
-        WK.QueueDiagramView.Event.SelectionChanged,
-        function (e) { console.log(e.data); },
-        this
-    );
-
+    WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionChanged, this._queueDiagramSelectionChanged, this);
 
     var $histogramSection = $('<div class="histograms" />');
     // FIXME: insert the histogram building stuff here.
@@ -206,6 +204,17 @@ WK.PipelineViewController.prototype = {
         }, this);
 
         this.selectedPatches = selectedPatches;
+    },
+
+    _queueDiagramSelectionChanged: function(event)
+    {
+        _.each(this.diagrams, function(diagram) {
+            if (event.target !== diagram)
+                diagram.clearSelection();
+        });
+
+        var diagram = event.target;
+        console.log("Selection changed:", diagram, diagram.selectedAttemptCount, diagram.selectedOutcome);
     },
 
     _recomputePatchAttempts: function()
