@@ -152,12 +152,12 @@ li.queue span.queue-label {
 /* SVG */
 
 .bar rect {
-  fill: steelblue;
+  fill: #979797;
   shape-rendering: crispEdges;
 }
 
 .bar rect:hover {
-  fill: orangered ;
+  fill: #876E9E ;
 }
 
 .bar text {
