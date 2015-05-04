@@ -71,6 +71,26 @@ ul.status-messages {
     list-style-type: none;
 }
 
+ul.status-messages li {
+    display: none;
+}
+
+#content.loading-commits ul.status-messages li.loading-commits,
+#content.loading-patches ul.status-messages li.loading-patches {
+    display: block;
+}
+
+#content.loading-patches .details {
+    display: none;
+}
+
+#content.loading-patches .queue-container {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 @keyframes dimmer {
     0% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -85,6 +105,7 @@ ul.status-messages li {
 
 .queue-container {
     position: relative;
+    transition: opacity 0.3s ease-in-out;
 }
 
 span.date-label {

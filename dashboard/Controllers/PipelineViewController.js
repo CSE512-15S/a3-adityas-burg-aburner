@@ -76,11 +76,13 @@ WK.PipelineViewController = function() {
         this._dateRangeChanged(picker.date1, endDate)
     }.bind(this));
 
+    this._queueContainerElement = document.getElementsByClassName("queue-container")[0];
+    this._queueContainerElement.classList.add("hidden"); // Start off with nothing.
     var queueListElement = this._queueListElement = document.createElement("ul");
     queueListElement.className = "queue-diagrams";
     queueListElement.appendChild(this.macQueueDiagramView.element);
     queueListElement.appendChild(this.iosQueueDiagramView.element);
-    $(".queue-container").append(queueListElement);
+    this._queueContainerElement.appendChild(queueListElement);
 
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionChanged, this._queueDiagramSelectionChanged, this);
     WK.QueueDiagramView.addEventListener(WK.QueueDiagramView.Event.SelectionCleared, this._queueDiagramSelectionCleared, this);
@@ -89,7 +91,19 @@ WK.PipelineViewController = function() {
     detailsSectionElement.className = "details hidden";
     detailsSectionElement.appendChild(this.histogramView.element);
     detailsSectionElement.appendChild(this.attemptsTableView.element);
-    $("#content").append(detailsSectionElement);
+
+    this.element = document.getElementById("content");
+    this.element.appendChild(detailsSectionElement);
+
+    var messageContainer = document.getElementsByClassName("status-messages")[0];
+    function addMessage(text, className) {
+        var li = document.createElement("li");
+        li.className = className;
+        li.textContent = text;
+        messageContainer.appendChild(li);
+    }
+    addMessage("Loading commit metadata...", "loading-commits");
+    addMessage("Loading patch queue data...", "loading-patches");
 
     // Set up initial state.
 
@@ -192,32 +206,27 @@ WK.PipelineViewController.prototype = {
         }
 
         this._tracDataSource.fetchCommitsForDateRange(this._startDate, this._endDate);
-        this._tracLoadingMessage = $('<li>Loading commit metadata...</li>');
-        $("ul.status-messages").append(this._tracLoadingMessage);
-
         this._patchQueueDataSource.fetchPatchResultsForDateRange(this._startDate, this._endDate, this._patchResultsReceived.bind(this));
-        this._queueLoadingMessage = $('<li>Loading patch queue data...</li>');
-        $("ul.status-messages").append(this._queueLoadingMessage);
+
+        if (this.selectedDiagram)
+            this.selectedDiagram.clearSelection();
+
+        this.element.classList.add("loading-patches");
+        this.element.classList.add("loading-commits");
     },
 
     _commitDataUpdated: function()
     {
         console.log("Fetched commits from trac: ", this._tracDataSource.recordedCommits);
 
-        if (this._tracLoadingMessage) {
-            $(this._tracLoadingMessage).remove();
-            delete this._tracLoadingMessage;
-        }
+        this.element.classList.remove("loading-commits");
     },
 
     _patchResultsReceived: function(patchResults)
     {
         console.log("Fetched patchResults from queue server: ", patchResults);
 
-        if (this._queueLoadingMessage) {
-            $(this._queueLoadingMessage).remove();
-            delete this._queueLoadingMessage;
-        }
+        this.element.classList.remove("loading-patches");
 
         var selectedPatches = [];
         _.each(patchResults, function(result) {
@@ -272,6 +281,8 @@ WK.PipelineViewController.prototype = {
         // (name, author) in the table needs to be manually joined from Bugzilla.
         this.attemptsTableView.attempts = this.selectedAttempts;
         this.attemptsTableView.dummyAttempts = WK.DummyData.buildAttempts;
+
+        this._queueContainerElement.classList.remove("hidden");
 
         // FIXME: use real metrics computed from this.selectedAttempts filtered by queue.
         this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, WK.DummyData.macQueueMetrics);
