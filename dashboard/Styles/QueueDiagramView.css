@@ -104,7 +104,10 @@
 .queue-attempt.selected-abort .line:not(.abort, .attempt),
 .queue-attempt.selected-abort .label:not(.abort, .attempt),
 .queue-attempt.selected-through .line:not(.attempt),
-.queue-attempt.selected-through .label:not(.attempt) {
+.queue-attempt.selected-through .label:not(.attempt),
+.queue-attempt.selected-ignore .label,
+.queue-attempt.selected-ignore .line,
+.queue-attempt.selected-ignore .attempt-circle {
     opacity: 0.5;
 }
 .queue-attempt.selected-pass .label.pass rect,

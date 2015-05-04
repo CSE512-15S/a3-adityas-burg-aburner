@@ -104,12 +104,14 @@ WK.QueueDiagramView.prototype = {
         else
             console.error("unknown outcome: ", outcome);
 
-        for (var i = 0; i <= ordinal; ++i) {
+        for (var i = 0; i <= this._attemptElements.length; ++i) {
             var attempt = this._attemptElements[i];
             if (i < ordinal)
                 attempt.classList.add("selected-through");
-            else
+            else if (i === ordinal)
                 attempt.classList.add(selectedAttemptClassName);
+            else if (outcome !== WK.PatchAttempt.Outcome.Retry)
+                attempt.classList.add("selected-ignore");
         }
 
         this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionChanged);
@@ -192,6 +194,7 @@ WK.QueueDiagramView.prototype = {
             element.classList.remove("selected-abort");
             element.classList.remove("selected-attempt");
             element.classList.remove("selected-through");
+            element.classList.remove("selected-ignore");
         }
 
         clearClasses(this._startElement);
