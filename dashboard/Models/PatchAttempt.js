@@ -28,6 +28,7 @@ WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDurat
     WK.Object.call(this);
 
     this.patchId = patchId;
+    this.queueId = queueId;
     this.ordinal = ordinal;
     this.waitDuration = waitDuration;
     /* attempt duration = total duration / (retries + 1) */
@@ -58,10 +59,10 @@ WK.PatchAttempt.prototype = {
 };
 
 WK.PatchAttempt.Outcome = {
-    Pass: "patch-attempt-pass",
-    Fail: "patch-attempt-fail",
-    Retry: "patch-attempt-retry",
-    Abort: "patch-attempt-abort",
-    Error: "patch-attempt-error",
-    Pending: "patch-attempt-pending"
+    Pass: "outcome-pass",
+    Fail: "outcome-fail",
+    Retry: "outcome-retry",
+    Abort: "outcome-abort",
+    Error: "outcome-error",
+    Pending: "outcome-pending"
 }

@@ -24,12 +24,13 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchQueueMetrics = function(patchQueue, allAttempts, dummyData)
+WK.PatchQueueMetrics = function(patchQueue, relevantPatches, allAttempts, dummyData)
 {
     WK.Object.call(this);
 
     console.assert(patchQueue instanceof WK.PatchQueue, patchQueue);
     this.queue = patchQueue;
+    this._patches = relevantPatches; // Is this needed?
     this._attempts = _.filter(allAttempts, function(attempt) {
         return attempt.queueId === patchQueue.id;
     });
@@ -42,5 +43,83 @@ WK.PatchQueueMetrics.prototype = {
     constructor: WK.PatchQueueMetrics,
     __proto__: WK.Object.prototype,
 
-    get attempts() { return this._dummyData.attempts; }
+    get attempts() { return this._dummyData.attempts; },
+
+    get attemptCount() { return this.metrics["all"].count; },
+
+    get metrics() {
+        if (!this._metrics)
+            this._metrics = this._computeMetrics();
+
+        return this._metrics;
+    },
+
+    getData: function(ordinal, outcome)
+    {
+        var metrics = this.metrics;
+        var label = this._labelForOutcome(ordinal, outcome);
+        return metrics[label];
+    },
+
+    // Private
+
+    _labelForOutcome: function(ordinal, outcome)
+    {
+        if (!ordinal)
+            return "work-queue";
+
+        ordinal = Math.min(ordinal, 3);
+
+        return "attempt-" + ordinal + "-" + outcome;
+    },
+
+    _computeMetrics: function()
+    {
+        function tabulateAttempt(attempt, bin) {
+            bin.count += 1;
+            bin.wait_times.push(attempt.waitDuration);
+            bin.processing_times.push(attempt.processDuration);
+        }
+
+        var binLabels = [
+            "work-queue",
+            "attempt-1-outcome-pass",
+            "attempt-1-outcome-fail",
+            "attempt-1-outcome-retry",
+            "attempt-1-outcome-abort",
+            "attempt-1-outcome-error",
+            "attempt-1-outcome-pending",
+            "attempt-2-outcome-pass",
+            "attempt-2-outcome-fail",
+            "attempt-2-outcome-retry",
+            "attempt-2-outcome-abort",
+            "attempt-2-outcome-error",
+            "attempt-2-outcome-pending",
+            "attempt-3-outcome-pass",
+            "attempt-3-outcome-fail",
+            "attempt-3-outcome-retry",
+            "attempt-3-outcome-abort",
+            "attempt-3-outcome-error",
+            "attempt-3-outcome-pending",
+            "all"
+        ];
+
+        var bins = {};
+
+        _.each(binLabels, function(label) {
+            bins[label] = {
+                count: 0,
+                wait_times: [],
+                processing_times: [],
+            };
+        });
+
+        _.each(this._attempts, function(attempt) {
+            var label = this._labelForOutcome(attempt.ordinal, attempt.outcome);
+            tabulateAttempt(attempt, bins[label]);
+            tabulateAttempt(attempt, bins["all"]);
+        }, this);
+
+        return bins;
+    }
 };

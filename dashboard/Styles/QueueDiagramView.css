@@ -137,3 +137,21 @@
 .queue-attempt.selected-attempt .attempt-circle text {
     fill: #5C4375;
 }
+
+.queue-attempt.empty-attempt {
+    display: none;
+}
+
+.queue-attempt.empty-pass .label.pass,
+.queue-attempt.empty-pass .line.pass,
+.queue-attempt.empty-fail .label.fail,
+.queue-attempt.empty-fail .line.fail,
+.queue-attempt.empty-abort .label.abort,
+.queue-attempt.empty-abort .line.abort,
+.queue-attempt.empty-attempt .label.attempt,
+.queue-attempt.empty-attempt .line.attempt
+{
+    -webkit-filter: grayscale(100%);
+    opacity: 0.3 !important;
+    pointer-events: none;
+}
