@@ -62,61 +62,101 @@ WK.OutcomeHistogramsView.prototype = {
             //return;
 
         // Generate a Bates distribution of 10 random variables.
-        var values = d3.range(1000).map(d3.random.bates(10));
+		var num_histograms = 3;
 
         // A formatter for counts.
         var formatCount = d3.format(",.0f");
 
         var margin = {top: 10, right: 30, bottom: 30, left: 30},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            width = 1000/num_histograms - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
+			
+			//width/= num_histograms;
+		
 
-        var x = d3.scale.linear()
-            .domain([0, 1])
-            .range([0, width]);
+        // Construct the SVG elemnts.
+		
+		for(var i =0; i< num_histograms; i++)
+		{
+			var values = d3.range(1000).map(d3.random.bates(10));
 
-        // Generate a histogram using twenty uniformly-spaced bins.
-        var data = d3.layout.histogram()
-            .bins(x.ticks(20))
-            (values);
+	        var x = d3.scale.linear()
+	            .domain([0, 1])
+	            .range([0, width]);
 
-        var y = d3.scale.linear()
-            .domain([0, d3.max(data, function(d) { return d.y; })])
-            .range([height, 0]);
+	        // Generate a histogram using twenty uniformly-spaced bins.
+	        var data = d3.layout.histogram()
+	            .bins(x.ticks(20))
+	            (values);
 
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
+	        var y = d3.scale.linear()
+	            .domain([0, d3.max(data, function(d) { return d.y; })])
+	            .range([height, 0]);
 
-        // Construct the SVG elemnt.
+	        var xAxis = d3.svg.axis()
+	            .scale(x)
+	            .orient("bottom")
+				.ticks(5);
+	
+			var yAxis = d3.svg.axis()
+	            .scale(y)
+	            .orient("left")
+				.ticks(5);
+				
+			var tip = d3.tip()
+			  .attr('class', 'd3-tip')
+			  .offset([-10, 0])
+			  .html(function(d) {
+			    return "<strong>Count:</strong> <span style='color:red'>" + formatCount(d.y) + "</span>";
+			  })
+	
+	        var svg = d3.select(this.element).append("svg")
+	            .attr("width", width + margin.left + margin.right)
+	            .attr("height", height + margin.top + margin.bottom)
+	          .append("g")
+	            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+	        var bar = svg.selectAll(".bar")
+	            .data(data)
+	          .enter().append("g")
+	            .attr("class", "bar")
+	            .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+	
+			svg.call(tip);
 
-        var svg = d3.select(this.element).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	        bar.append("rect")
+	            .attr("x", 1)
+	            .attr("width", x(data[0].dx) - 1)
+	            .attr("height", function(d) { return height - y(d.y); })
+				.on('mouseover', tip.show)
+				.on('mouseout', tip.hide);
 
-        var bar = svg.selectAll(".bar")
-            .data(data)
-          .enter().append("g")
-            .attr("class", "bar")
-            .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+				// 	        bar.append("text")
+				// .attr("font-size","8px")
+				// 	            .attr("dy", ".5em")
+				// 	            .attr("y", 6)
+				// 	            .attr("x", x(data[0].dx) / 2)
+				// 	            .attr("text-anchor", "middle")
+				// 	            .text(function(d) { if(formatCount(d.y)>0)
+				// 						return formatCount(d.y); 
+				// 					else
+				// 						return "";
+				// 						});
 
-        bar.append("rect")
-            .attr("x", 1)
-            .attr("width", x(data[0].dx) - 1)
-            .attr("height", function(d) { return height - y(d.y); });
+	        svg.append("g")
+	            .attr("class", "x axis")
+	            .attr("transform", "translate(0," + height + ")")
+	            .call(xAxis);
+	
+				svg.selectAll(".tick")
+				    .filter(function (d) { return d === 0;  })
+				    .remove();
 
-        bar.append("text")
-            .attr("dy", ".75em")
-            .attr("y", 6)
-            .attr("x", x(data[0].dx) / 2)
-            .attr("text-anchor", "middle")
-            .text(function(d) { return formatCount(d.y); });
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+			svg.append("g")
+	            .attr("class", "y axis")
+	            .attr("transform", "translate("+0+",0)")
+	            .call(yAxis);
+	
+		}
     }
 };
