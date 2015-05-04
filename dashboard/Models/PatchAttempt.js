@@ -38,7 +38,7 @@ WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDurat
     function outcomeFromResultText(text) {
         switch (text) {
         case "pass": return WK.PatchAttempt.Outcome.Pass;
-        case "fail": return WK.PatchAttempt.Outcome.Pass;
+        case "fail": return WK.PatchAttempt.Outcome.Fail;
         case "retry": return WK.PatchAttempt.Outcome.Retry;
         case "not processed": return WK.PatchAttempt.Outcome.Abort;
         case "could not apply": return WK.PatchAttempt.Outcome.Abort;
