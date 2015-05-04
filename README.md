@@ -9,26 +9,36 @@ a3-adityas-burg-aburner
 
 ## Project: Patch Pipeline
 
-TODO: Put your a brief description of your final interactive visualization application and your dataset here.
+Our visualization is an exploratory tool for analyzing data from bots running WebKit patch tests. The current dashboard for the tests is a large table of text. It provides accurate data, but it is difficult to read and doesn't provide insight into the form of the test process:
 
-TODO: add BSD license
+(insert screenshot of metrics.html here)
+
+Our visualization is designed to graphically represent the testing process, showing the flow of patch test attempts as the come from the queue and are run by bots multiple times against system builds. The different outcomes (pass, fail, abort, and retry) are represented by arrows, which we label with percentages from the patch test data. This queue flow diagram can be used as a selection tool, to choose a subset of the test results data for displaying in D3 histograms and a details table below.
+
+(insert screenshot of pipeline.html here)
 
 ## Running Instructions
 
 Access our visualization at http://cse512-15s.github.io/a3-adityas-burg-aburner/ or download this repository and run `python -m SimpleHTTPServer 9000` and access this from http://localhost:9000/.
 
-TODO: explain how to use the visualization here (as well as on the page itself).
+To use the visualization:
+1. Select a date range at the top of the page
+2. Wait for test results data to load from API
+3. Use the queue flow diagram to select a test outcome
+4. View detailed breakdowns of the test outcomes in the histogram and table
 
 If you put your work online, please also write a [one-line description and add a link to your final work](http://note.io/1n3u46s) so people can access it directly from the CSE512-15S page.
 
 ## Story Board
 
-TODO: Put either your storyboard content or a [link to your storyboard pdf file](storyboard.pdf?raw=true) here. Just like A2, you can use any software to create a *reasonable* pdf storyboard.
+[Our storyboard PDF is here](https://github.com/CSE512-15S/a3-adityas-burg-aburner/raw/master/artboards.pdf)
 
 
 ### Changes between Storyboard and the Final Implementation
 
-TODO: A paragraph explaining changes between the storyboard and the final implementation.
+1. In our initial storyboard, we planned to display all queue data in the histograms and tables, and then selecting specific outcomes in the queue flow diagram would filter the data down to a subset. However, this amount of data became prohibitive to work with, and so now the visualization starts with no histogram or table data and the user must make a selection from the diagram to populate them.
+
+2. At first we planned to include Author and Bug Description columns in the patch results details table. However these would require separate API calls, made on each patch result. We decided this would take too long to load, and so those columns are left out of our final product.
 
 
 ## Development Process
