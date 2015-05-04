@@ -140,6 +140,10 @@ WK.PipelineViewController.prototype = {
         });
 
         this._selectedDiagram = value;
+
+        if (value)
+            this.histogramView.queueMetrics = value.queueMetrics;
+
         var hasAnySelection = value && (value.selectedOutcome !== null || value.selectedAttemptCount !== null);
         this._detailsSectionElement.classList.toggle("hidden", !hasAnySelection);
     },

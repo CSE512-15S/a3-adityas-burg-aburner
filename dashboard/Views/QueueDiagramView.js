@@ -60,7 +60,6 @@ WK.QueueDiagramView.prototype = {
     {
         console.assert(value instanceof WK.PatchQueueMetrics, value);
         this._metrics = value;
-        console.log("got metrics", value);
         this.render();
     },
 
