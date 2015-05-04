@@ -128,7 +128,7 @@
 
 <script type="text/template" id="QueueDiagramView-start">
 <div class="queue-item queue-start">
-<span class="queue-label"><%- view.name %></span>
+<span class="queue-label"><%- summary.name %></span>
 <svg width="146px" height="270px" viewBox="0 0 146 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g transform="translate(1, 107)" stroke="#979797" stroke-width="4">
         <rect fill="#D8D8D8" x="0.771953909" y="0" width="142.456092" height="52"></rect>
@@ -168,47 +168,47 @@
     <g class="outcome pass label" transform="translate(128, 10)">
         <rect x="0" y="0.3625" width="58" height="32.075" rx="8"></rect>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= view.pass.percent %></tspan>
+            <tspan class="label-title" text-anchor="middle" x="29" y="14"><%= summary.pass.percentString %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= view.pass.caption %></tspan>
+            <tspan class="label-detail" text-anchor="middle" x="29" y="25.075"><%= summary.pass.count %></tspan>
         </text>
     </g>
     <!-- fail label -->
     <g class="outcome fail label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(128, 224)">
         <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= view.fail.percent %></tspan>
+            <tspan class="label-title" text-anchor="middle" x="29" y="14"><%= summary.fail.percentString %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= view.fail.caption %></tspan>
+            <tspan class="label-detail" text-anchor="middle" x="29" y="25.075"><%= summary.fail.count %></tspan>
         </text>
     </g>
     <!-- abort label -->
     <g class="outcome abort label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(23, 194)">
         <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= view.abort.percent %></tspan>
+            <tspan class="label-title" text-anchor="middle" x="29" y="14"><%= summary.abort.percentString %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= view.abort.caption %></tspan>
+            <tspan class="label-detail" text-anchor="middle" x="29" y="25.075"><%= summary.abort.count %></tspan>
         </text>
     </g>
     <!-- attempt label -->
     <g class="outcome attempt label" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" transform="translate(22, 117)">
         <rect x="0" y="0.3625" width="58" height="32.075" rx="8"/>
         <text font-family="Helvetica Neue" font-size="10.875" font-weight="bold" fill="#4A4A4A">
-            <tspan text-anchor="middle" x="29" y="14"><%= view.attempt.percent %></tspan>
+            <tspan class="label-title" text-anchor="middle" x="29" y="14"><%= summary.retry.percentString %></tspan>
         </text>
         <text font-family="Helvetica Neue" font-size="7.25" font-weight="normal" fill="#9B9B9B">
-            <tspan text-anchor="middle" x="29" y="25.075"><%= view.attempt.caption %></tspan>
+            <tspan class="label-detail" text-anchor="middle" x="29" y="25.075"><%= summary.retry.count %></tspan>
         </text>
     </g>
     <!-- attempt number circle -->
     <g class="attempt-circle" transform="translate(125, 102)">
         <circle cx="32" cy="32" r="32"></circle>
         <text>
-            <tspan text-anchor="middle" x="32" y="44"><%= view.name %></tspan>
+            <tspan text-anchor="middle" x="32" y="44"><%= summary.ordinalString %></tspan>
         </text>
     </g>
 </svg>
@@ -219,8 +219,8 @@
 // Underscore template functions
 var options = {'variable': 'view'};
 WK.ViewTemplates = {
-    queueDiagramStart: _.template($('#QueueDiagramView-start').html(), options),
-    queueDiagramAttempt: _.template($('#QueueDiagramView-attempt').html(), options),
+    queueDiagramStart: _.template($('#QueueDiagramView-start').html(), {'variable': 'summary'}),
+    queueDiagramAttempt: _.template($('#QueueDiagramView-attempt').html(), {'variable': 'summary'}),
     buildAttemptTableRow: _.template($('#BuildAttemptTableView-row').html(), options)
 };
 

@@ -24,7 +24,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.PatchQueueMetrics = function(patchQueue, relevantPatches, allAttempts, dummyData)
+WK.PatchQueueMetrics = function(patchQueue, relevantPatches, allAttempts)
 {
     WK.Object.call(this);
 
@@ -34,16 +34,11 @@ WK.PatchQueueMetrics = function(patchQueue, relevantPatches, allAttempts, dummyD
     this._attempts = _.filter(allAttempts, function(attempt) {
         return attempt.queueId === patchQueue.id;
     });
-
-    // FIXME: remove
-    this._dummyData = dummyData || {'attempts': []};
 };
 
 WK.PatchQueueMetrics.prototype = {
     constructor: WK.PatchQueueMetrics,
     __proto__: WK.Object.prototype,
-
-    get attempts() { return this._dummyData.attempts; },
 
     get attemptCount() { return this.metrics["all"].count; },
 
@@ -59,6 +54,48 @@ WK.PatchQueueMetrics.prototype = {
         var metrics = this.metrics;
         var label = this._labelForOutcome(ordinal, outcome);
         return metrics[label];
+    },
+
+    getSummaryForAttempt: function(ordinal)
+    {
+        var totalData = this.metrics["all"];
+
+        function computeSummary(ordinal, outcome) {
+            var data = this.getData(ordinal, outcome);
+
+            var adjustedCount = data.count;
+            if (outcome === WK.PatchAttempt.Outcome.Retry) {
+                for (var i = ordinal + 1; i <= 3; ++i) {
+                    for (var key in WK.PatchAttempt.Outcome) {
+                        adjustedCount += this.getData(i, WK.PatchAttempt.Outcome[key]).count;
+                    }
+                }
+            }
+
+            return {
+                percentString: (adjustedCount / totalData.count * 100).toFixed(1) + '%',
+                count: adjustedCount,
+
+                wait_med: data.wait_times.median(),
+                wait_avg: data.wait_times.average(),
+                wait_min: _.min(data.wait_times),
+                wait_max: _.max(data.wait_times),
+
+                process_med: data.processing_times.median(),
+                process_avg: data.processing_times.average(),
+                process_min: _.min(data.processing_times),
+                process_max: _.max(data.processing_times),
+            }
+        }
+
+        return {
+            "pass": computeSummary.call(this, ordinal, WK.PatchAttempt.Outcome.Pass),
+            "fail": computeSummary.call(this, ordinal, WK.PatchAttempt.Outcome.Fail),
+            "abort": computeSummary.call(this, ordinal, WK.PatchAttempt.Outcome.Abort),
+            "retry": computeSummary.call(this, ordinal, WK.PatchAttempt.Outcome.Retry),
+
+            "ordinalString": ordinal >= 3 ? "3+" : ordinal,
+        }
     },
 
     // Private

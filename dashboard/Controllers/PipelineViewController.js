@@ -282,7 +282,7 @@ WK.PipelineViewController.prototype = {
 
         this._queueContainerElement.classList.remove("hidden");
 
-        this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, this.selectedPatches, this.allAttempts, WK.DummyData.macQueueMetrics);
-        this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, this.selectedPatches, this.allAttempts, WK.DummyData.iosQueueMetrics);
+        this.macQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.macQueue, this.selectedPatches, this.allAttempts);
+        this.iosQueueDiagramView.queueMetrics = new WK.PatchQueueMetrics(this.iosQueue, this.selectedPatches, this.allAttempts);
     },
 };

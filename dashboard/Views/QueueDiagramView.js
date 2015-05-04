@@ -60,6 +60,7 @@ WK.QueueDiagramView.prototype = {
     {
         console.assert(value instanceof WK.PatchQueueMetrics, value);
         this._metrics = value;
+        console.log("got metrics", value);
         this.render();
     },
 
@@ -141,12 +142,14 @@ WK.QueueDiagramView.prototype = {
         this.element.appendChild(this._startElement);
 
         this._attemptElements = [];
-        _.each(this.queueMetrics.attempts, function(attempt, index) {
-            var attemptElement = $(WK.ViewTemplates.queueDiagramAttempt(attempt)).get(0);
+        for (var i = 1; i <= 3; ++i) {
+            var summary = this.queueMetrics.getSummaryForAttempt(i);
+            console.log("summary", summary);
+            var attemptElement = $(WK.ViewTemplates.queueDiagramAttempt(summary)).get(0);
             attemptElement.addEventListener("click", this._diagramSegmentClicked.bind(this));
             this._attemptElements.push(attemptElement);
             this.element.appendChild(attemptElement);
-        }, this);
+        }
 
         this._updateEmptyOutcomesVisibility();
     },
@@ -206,6 +209,7 @@ WK.QueueDiagramView.prototype = {
             attempt.classList.toggle("empty-fail", metricsByOutcome[WK.PatchAttempt.Outcome.Fail].count === 0);
             attempt.classList.toggle("empty-abort", metricsByOutcome[WK.PatchAttempt.Outcome.Abort].count === 0);
             attempt.classList.toggle("empty-retry", metricsByOutcome[WK.PatchAttempt.Outcome.Retry].count === 0);
+            attempt.classList.toggle("empty-attempt", i > 0);
         }, this);
     },
 
