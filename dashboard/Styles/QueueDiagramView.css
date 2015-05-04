@@ -139,7 +139,7 @@
 }
 
 .queue-attempt.empty-attempt {
-    display: none;
+    display: none !important;
 }
 
 .queue-attempt.empty-pass .label.pass,
