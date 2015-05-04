@@ -59,6 +59,7 @@ WK.QueueDiagramView.prototype = {
     set queueMetrics(value)
     {
         console.assert(value instanceof WK.PatchQueueMetrics, value);
+        console.log("got metrics", value);
         this._metrics = value;
         this.render();
     },
@@ -200,15 +201,17 @@ WK.QueueDiagramView.prototype = {
     {
         _.each(this._attemptElements, function(attempt, i) {
             var metricsByOutcome = {};
+            var totalCount = 0;
             for (var key in WK.PatchAttempt.Outcome) {
                 var outcome = WK.PatchAttempt.Outcome[key];
                 metricsByOutcome[outcome] = this._metrics.getData(i + 1, outcome);
+                totalCount += metricsByOutcome[outcome].count;
             }
             attempt.classList.toggle("empty-pass", metricsByOutcome[WK.PatchAttempt.Outcome.Pass].count === 0);
             attempt.classList.toggle("empty-fail", metricsByOutcome[WK.PatchAttempt.Outcome.Fail].count === 0);
             attempt.classList.toggle("empty-abort", metricsByOutcome[WK.PatchAttempt.Outcome.Abort].count === 0);
             attempt.classList.toggle("empty-retry", metricsByOutcome[WK.PatchAttempt.Outcome.Retry].count === 0);
-            attempt.classList.toggle("empty-attempt", i > 0);
+            attempt.classList.toggle("empty-attempt", i > 1 && totalCount === 0);
         }, this);
     },
 
