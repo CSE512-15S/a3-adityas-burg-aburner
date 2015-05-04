@@ -11,11 +11,11 @@ a3-adityas-burg-aburner
 
 Our visualization is an exploratory tool for analyzing data from bots running WebKit patch tests. The current dashboard for the tests is a large table of text. It provides accurate data, but it is difficult to read and doesn't provide insight into the form of the test process:
 
-(insert screenshot of metrics.html here)
+![Old dashboard](https://raw.githubusercontent.com/CSE512-15S/a3-adityas-burg-aburner/master/old-dash.png)
 
 Our visualization is designed to graphically represent the testing process, showing the flow of patch test attempts as the come from the queue and are run by bots multiple times against system builds. The different outcomes (pass, fail, abort, and retry) are represented by arrows, which we label with percentages from the patch test data. This queue flow diagram can be used as a selection tool, to choose a subset of the test results data for displaying in D3 histograms and a details table below.
 
-(insert screenshot of pipeline.html here)
+![Our dashboard](https://raw.githubusercontent.com/CSE512-15S/a3-adityas-burg-aburner/master/our-dash.png)
 
 ## Running Instructions
 
