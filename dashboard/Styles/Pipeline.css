@@ -149,7 +149,17 @@ li.queue span.queue-label {
     font-size: 26px !important;
 }
 
-/* SVG */
+/* Histogram related css */
+
+.label
+{
+	fill:#5C5C5C;
+}
+
+.labelslow
+{
+	fill:#AA3C3C;
+}
 
 .bar rect {
   fill: #979797;
