@@ -52,6 +52,11 @@ WK.PatchAttempt = function(patchId, queueId, ordinal, waitDuration, processDurat
 WK.PatchAttempt.prototype = {
     constructor: WK.PatchAttempt,
     __proto__: WK.Object.prototype,
+
+    get patchURL()
+    {
+        return "https://bugs.webkit.org/attachment.cgi?id=" + this.patchId + "&action=prettypatch";
+    }
 };
 
 WK.PatchAttempt.Outcome = {

@@ -31,13 +31,11 @@ WK.BuildAttemptTableView = function(delegate) {
     this._delegate = delegate;
 
     var columns = [
-        {key: "try", label: "Try"},
+        {key: "try", label: "Try #"},
         {key: "result", label: "Result"},
         {key: "patch", label: "Patch"},
-        {key: "start", label: "Start"},
-        {key: "duration", label: "Duration"},
-        {key: "author", label: "Author"},
-        {key: "description", label: "Bug description"},
+        {key: "waitDuration", label: "Wait Time"},
+        {key: "duration", label: "Processing Time"},
     ];
 
     var table = this.element = document.createElement("table");
@@ -73,8 +71,7 @@ WK.BuildAttemptTableView.prototype = {
             return;
 
         this._attempts = value;
-        // FIXME: remove dummyAttempts once we can render from this instead.
-        //this.render();
+        this.render();
     },
 
     get dummyAttempts()
@@ -88,14 +85,17 @@ WK.BuildAttemptTableView.prototype = {
             return;
 
         this._dummyAttempts = value;
-        this.render();
+        //this.render();
     },
 
     render: function()
     {
         this._tbodyElement.removeChildren();
 
-        this._dummyAttempts.forEach(function(attempt) {
+        // FIXME: not sorted?
+        var recentAttempts = this._attempts.slice(0, 50);
+
+        recentAttempts.forEach(function(attempt) {
             var $row = $(WK.ViewTemplates.buildAttemptTableRow(attempt));
             this._tbodyElement.appendChild($row[0]);
         }, this);

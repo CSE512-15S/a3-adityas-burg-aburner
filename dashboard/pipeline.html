@@ -118,13 +118,11 @@
 <!-- These templates are used to generate the diagram and table rows. -->
 <script type="text/template" id="BuildAttemptTableView-row">
 <tr>
-<td><span class="try-num"><%- view.try_num %></span></td>
-<td><img src="Images/arrow_<%= view.result_type %>.svg" alt="arrow <%= view.result_type %>"></td>
-<td><a href="<%= view.patch_url %>"><%- view.patch_name %></a></td>
-<td><%- view.start %></td>
-<td><%- view.duration %></td>
-<td><a href="<%= view.author_url %>"><%- view.author_name %></a></td>
-<td><a href="<%= view.author_url %>"><%- view.bug_description %></a></td>
+<td><span class="try-num"><%- attempt.ordinal %></span></td>
+<td><img src="Images/<%= attempt.outcome %>.svg" alt="arrow <%= attempt.outcome %>"></td>
+<td><a href="<%= attempt.patchURL %>">Patch #<%- attempt.patchId %></a></td>
+<td><%- attempt.waitDuration %></td>
+<td><%- attempt.processDuration %></td>
 </tr>
 </script>
 
@@ -219,11 +217,10 @@
 
 <script type="text/javascript">
 // Underscore template functions
-var options = {'variable': 'view'};
 WK.ViewTemplates = {
     queueDiagramStart: _.template($('#QueueDiagramView-start').html(), {'variable': 'summary'}),
     queueDiagramAttempt: _.template($('#QueueDiagramView-attempt').html(), {'variable': 'summary'}),
-    buildAttemptTableRow: _.template($('#BuildAttemptTableView-row').html(), options)
+    buildAttemptTableRow: _.template($('#BuildAttemptTableView-row').html(), {'variable': 'attempt'})
 };
 
 document.addEventListener("DOMContentLoaded", function() {

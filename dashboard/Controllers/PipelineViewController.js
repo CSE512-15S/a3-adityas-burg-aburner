@@ -90,6 +90,10 @@ WK.PipelineViewController = function() {
     var detailsSectionElement = this._detailsSectionElement= document.getElementsByClassName("details")[0];
     detailsSectionElement.classList.add("hidden");
     detailsSectionElement.appendChild(this.histogramView.element);
+    var tableHeading = document.createElement("h2");
+    tableHeading.textContent = "Most Recent Build Attempts";
+    detailsSectionElement.appendChild(tableHeading);
+    detailsSectionElement.appendChild(document.createElement("hr"));
     detailsSectionElement.appendChild(this.attemptsTableView.element);
 
     this.element = document.getElementById("content");
@@ -253,8 +257,18 @@ WK.PipelineViewController.prototype = {
 
     _recomputePatchAttempts: function()
     {
-        // FIXME: these should be derived from various view selections.
         var filters = [];
+
+/*
+        if (this.selectedDiagram) {
+            filters.push(function(attempt) {
+
+            })
+            attempt.XXX === this.selectedDiagram.selectedAttemptCount &&
+            attempt.XXX === this.selectedDiagram.selectedOutcome
+        }
+*/
+
         var composedFilters = _.compose.apply(filters);
         var allAttempts = [];
         var selectedAttempts = [];
@@ -279,11 +293,7 @@ WK.PipelineViewController.prototype = {
 
     _recomputePatchMetrics: function()
     {
-        // FIXME: remove dummyAttempts, generate from real data.
-        // This will require data format changes in the view: the bug metadata
-        // (name, author) in the table needs to be manually joined from Bugzilla.
         this.attemptsTableView.attempts = this.selectedAttempts;
-        this.attemptsTableView.dummyAttempts = WK.DummyData.buildAttempts;
 
         this._queueContainerElement.classList.remove("hidden");
 
