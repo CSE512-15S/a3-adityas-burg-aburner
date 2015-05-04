@@ -23,45 +23,20 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.QueueDiagramView = function(queue) {
+WK.Patch = function(data)
+{
     WK.Object.call(this);
 
-    console.assert(queue instanceof WK.PatchQueue, queue);
-    this.queue = queue;
+    this._data = data;
+};
 
-    this.element = document.createElement("li");
-    this.element.className = "queue";
+WK.Object.addConstructorFunctions(WK.Patch);
 
-    this.queueMetrics = new WK.PatchQueueMetrics(queue, {'attempts': []}); // Start with nothing.
-}
+WK.Patch.Event = {
+    Updated: "updated"
+};
 
-WK.QueueDiagramView.prototype = {
+WK.Patch.prototype = {
+    constructor: WK.Patch,
     __proto__: WK.Object.prototype,
-    constructor: WK.QueueDiagramView,
-
-    get name()
-    {
-        return this.queue.shortName;
-    },
-
-    get queueMetrics()
-    {
-        return this._metrics;
-    },
-
-    set queueMetrics(value)
-    {
-        console.assert(value instanceof WK.PatchQueueMetrics, value);
-        this._metrics = value;
-        this.render();
-    },
-
-    render: function()
-    {
-        this.element.removeChildren();
-        this.element.appendChild($(WK.ViewTemplates.queueDiagramStart(this)).get(0));
-        this.queueMetrics.attempts.forEach(function (attempt) {
-            this.element.appendChild($(WK.ViewTemplates.queueDiagramAttempt(attempt)).get(0));
-        }, this);
-    }
 };

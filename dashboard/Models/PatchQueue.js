@@ -70,10 +70,10 @@ WK.PatchQueue.prototype = {
         return this._loadedDetailedStatus;
     },
 
-    get attempts()
+    get patches()
     {
         console.assert(this._loadedDetailedStatus);
-        return this._attempts;
+        return this._patches;
     },
 
     get bots()
@@ -98,12 +98,12 @@ WK.PatchQueue.prototype = {
     loadDetailedStatus: function(callback)
     {
         JSON.load(this._dataSource.jsonQueueStatusURLForQueue(this), function(data) {
-            this._attempts = [];
+            this._patches = [];
             for (var i = 0, end = data.queue.length; i < end; ++i) {
                 var patch = data.queue[i];
                 var activeSinceTime = patch.active_since ? Date.parse(patch.active_since) : 0;
                 // FIXME: extract to PatchAttempt.
-                this._attempts.push({
+                this._patches.push({
                     attachmentID: patch.attachment_id,
                     statusPageURL: patch.status_page,
                     latestMessage: patch.latest_message,

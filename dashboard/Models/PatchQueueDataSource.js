@@ -90,7 +90,7 @@ WK.PatchQueueDataSource.prototype = {
     //     },
     //     ...
     // }
-    fetchPatchesForDateRange: function(fromTime, toTime, callback)
+    fetchPatchResultsForDateRange: function(fromTime, toTime, callback)
     {
         JSON.load(this.jsonProcessingTimesURLForDateRange(fromTime, toTime), function(payload) {
             for (patchData in payload) {
@@ -98,7 +98,9 @@ WK.PatchQueueDataSource.prototype = {
                     queueData.date = new Date(queueData.date);
                 }
             }
-            callback(payload, fromTime, toTime);
+
+            var patches = _.map(payload, function(data) { return new WK.PatchResult(data); });
+            callback(patches, fromTime, toTime);
         }.bind(this));
     },
 };

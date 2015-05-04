@@ -25,111 +25,109 @@
 
 WK.DummyData = {};
 
-WK.DummyData.macQueue = {
-    name: 'Mac',
-    attempts: [
-        {
-            name: '1',
-            attempt: {
-                percent: '100%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '50%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '30%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            }
+WK.DummyData.macQueueMetrics = {
+attempts: [
+    {
+        name: '1',
+        attempt: {
+            percent: '100%',
+            caption: '2-55s (x\u0305 5s)'
         },
-        {
-            name: '2',
-            attempt: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '4%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '2%',
-                caption: '2-55s (x\u0305 5s)'
-            }
+        pass: {
+            percent: '50%',
+            caption: '2-55s (x\u0305 5s)'
         },
-        {
-            name: '3+',
-            attempt: {
-                percent: '3%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '0.5%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '1.5%',
-                caption: '2-55s (x\u0305 5s)'
-            }
+        fail: {
+            percent: '30%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        abort: {
+            percent: '10%',
+            caption: '2-55s (x\u0305 5s)'
         }
-    ]
+    },
+    {
+        name: '2',
+        attempt: {
+            percent: '10%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        pass: {
+            percent: '1%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        fail: {
+            percent: '4%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        abort: {
+            percent: '2%',
+            caption: '2-55s (x\u0305 5s)'
+        }
+    },
+    {
+        name: '3+',
+        attempt: {
+            percent: '3%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        pass: {
+            percent: '0.5%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        fail: {
+            percent: '1%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        abort: {
+            percent: '1.5%',
+            caption: '2-55s (x\u0305 5s)'
+        }
+    }
+]
 };
 
-WK.DummyData.iosQueue = {
-    name: 'iOS',
-    attempts: [
-        {
-            name: '1',
-            attempt: {
-                percent: '100%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '50%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '30%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            }
+WK.DummyData.iosQueueMetrics = {
+attempts: [
+    {
+        name: '1',
+        attempt: {
+            percent: '100%',
+            caption: '2-55s (x\u0305 5s)'
         },
-        {
-            name: '2',
-            attempt: {
-                percent: '10%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            pass: {
-                percent: '1%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            fail: {
-                percent: '4%',
-                caption: '2-55s (x\u0305 5s)'
-            },
-            abort: {
-                percent: '2%',
-                caption: '2-55s (x\u0305 5s)'
-            }
+        pass: {
+            percent: '50%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        fail: {
+            percent: '30%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        abort: {
+            percent: '10%',
+            caption: '2-55s (x\u0305 5s)'
         }
-    ]
+    },
+    {
+        name: '2',
+        attempt: {
+            percent: '10%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        pass: {
+            percent: '1%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        fail: {
+            percent: '4%',
+            caption: '2-55s (x\u0305 5s)'
+        },
+        abort: {
+            percent: '2%',
+            caption: '2-55s (x\u0305 5s)'
+        }
+    }
+]
 };
 
 WK.DummyData.buildAttempts = [

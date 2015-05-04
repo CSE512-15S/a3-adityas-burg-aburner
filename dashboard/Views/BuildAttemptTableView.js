@@ -23,12 +23,8 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-WK.BuildAttemptTableView = function(attempts) {
+WK.BuildAttemptTableView = function() {
     WK.Object.call(this);
-
-    this._attempts = attempts;
-
-    // FIXME: we should probably sort these attempts, unless done elsewhere.
 
     var columns = [
         {key: "try", label: "Try"},
@@ -40,17 +36,20 @@ WK.BuildAttemptTableView = function(attempts) {
         {key: "description", label: "Bug description"},
     ];
 
-    // FIXME: split into separate render() function.
-    var lines = [];
-    lines.push('<table class="build-attempts">');
-    lines.push('<thead><tr>');
-    columns.forEach(function(column) { lines.push('<th>' + column.label + '</th>') });
-    lines.push('</tr></thead><tbody>')
-    this._attempts.forEach(function(attempt) {
-        lines.push(WK.ViewTemplates.buildAttemptTableRow(attempt));
+    var table = this.element = document.createElement("table");
+    table.className = "build-attempts";
+    var thead = document.createElement("thead");
+    table.appendChild(thead);
+    var tr = document.createElement("tr");
+    columns.forEach(function(column) {
+        var th = document.createElement("th");
+        th.textContent = column.label;
+        tr.appendChild(th);
     });
-    lines.push('</tbody></table>');
-    this.$element = $(lines.join(''));
+    this._tbodyElement = document.createElement("tbody");
+    table.appendChild(this._tbodyElement);
+    // Set up initial state.
+    this.attempts = [];
 }
 
 WK.BuildAttemptTableView.prototype = {
@@ -60,5 +59,24 @@ WK.BuildAttemptTableView.prototype = {
     get attempts()
     {
         return this._attempts.slice();
+    },
+
+    set attempts(value)
+    {
+        if (!_.isArray(value))
+            return;
+
+        this._attempts = value;
+        this.render();
+    },
+
+    render: function()
+    {
+        this._tbodyElement.removeChildren();
+
+        this._attempts.forEach(function(attempt) {
+            var $row = $(WK.ViewTemplates.buildAttemptTableRow(attempt));
+            this._tbodyElement.appendChild($row[0]);
+        }, this);
     }
 };
