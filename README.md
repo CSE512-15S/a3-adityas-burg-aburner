@@ -30,7 +30,6 @@ To use the visualization:
 3. Use the queue flow diagram to select a test outcome
 4. View detailed breakdowns of the test outcomes in the histogram and table
 
-TODO: If you put your work online, please also write a [one-line description and add a link to your final work](http://note.io/1n3u46s) so people can access it directly from the CSE512-15S page.
 
 ## Story Board
 
@@ -44,6 +43,8 @@ TODO: If you put your work online, please also write a [one-line description and
 2. At first we planned to include Author and Bug Description columns in the patch results details table. However these would require separate XML API calls per each patch. We decided this would take too long to load, and so those columns are left out of our final submission. (This data depends on an upgrade of the WebKit project's Bugzilla bug tracker.)
 
 3. We wanted to be able to select ranges in the histogram, updating the details table (linking and brushing). However we did not have time to complete this complex of an interaction task.
+
+4. Breaking news: the histogram and table always show all of the data for a selected queue (instead of filtering by the specific outcome chosen). We ran out of time to complete our data filtering.
 
 
 ## Development Process
@@ -61,10 +62,9 @@ TODO: If you put your work online, please also write a [one-line description and
  - project documentation
 
 ### Aditya
- - created the histogram views
+ - created the linked histogram views
 
-Include:
-- Breakdown of how the work was split among the group members.
-- A commentary on the development process, including answers to the following questions:
-  - Roughly how much time did you spend developing your application?
-  - What aspects took the most time?
+### Overall
+ - our application took roughly 25 man hours to complete
+ - gathering and formatting the data took the most time
+ - user events and view linking took a lot of time too
