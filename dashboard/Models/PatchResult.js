@@ -33,7 +33,7 @@ WK.PatchResult = function(patchId, results)
         var queueResult = results[queueId];
         var adjustedProcessDuration = parseInt(queueResult.process_duration) / (queueResult.retry_count + 1);
         for (var i = 0; i <= queueResult.retry_count; ++i)
-            this.attempts.push(new WK.PatchAttempt(patchId, queueId, i + 1, queueResult.wait_duration, adjustedProcessDuration, queueResult.final_message))
+            this.attempts.push(new WK.PatchAttempt(patchId, queueId, i, queueResult.wait_duration, adjustedProcessDuration, queueResult.final_message))
     }
 };
 

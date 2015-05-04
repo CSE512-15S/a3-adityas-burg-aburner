@@ -72,6 +72,7 @@ WK.QueueDiagramView.prototype = {
         this._selectedOutcome = null;
 
         this._clearSelectionClasses();
+        this._updateEmptyOutcomesVisibility();
         this.dispatchEventToListeners(WK.QueueDiagramView.Event.SelectionCleared);
     },
 
@@ -94,6 +95,7 @@ WK.QueueDiagramView.prototype = {
 
         // Update styles.
         this._clearSelectionClasses();
+        this._updateEmptyOutcomesVisibility();
 
         var selectedAttemptClassName = null;
         if (outcome === WK.PatchAttempt.Outcome.Pass)
@@ -145,6 +147,8 @@ WK.QueueDiagramView.prototype = {
             this._attemptElements.push(attemptElement);
             this.element.appendChild(attemptElement);
         }, this);
+
+        this._updateEmptyOutcomesVisibility();
     },
 
     // Private
@@ -190,6 +194,21 @@ WK.QueueDiagramView.prototype = {
         this.setSelection(ordinal, outcome);
     },
 
+    _updateEmptyOutcomesVisibility: function()
+    {
+        _.each(this._attemptElements, function(attempt, i) {
+            var metricsByOutcome = {};
+            for (var key in WK.PatchAttempt.Outcome) {
+                var outcome = WK.PatchAttempt.Outcome[key];
+                metricsByOutcome[outcome] = this._metrics.getData(i + 1, outcome);
+            }
+            attempt.classList.toggle("empty-pass", metricsByOutcome[WK.PatchAttempt.Outcome.Pass].count === 0);
+            attempt.classList.toggle("empty-fail", metricsByOutcome[WK.PatchAttempt.Outcome.Fail].count === 0);
+            attempt.classList.toggle("empty-abort", metricsByOutcome[WK.PatchAttempt.Outcome.Abort].count === 0);
+            attempt.classList.toggle("empty-retry", metricsByOutcome[WK.PatchAttempt.Outcome.Retry].count === 0);
+        }, this);
+    },
+
     _clearSelectionClasses: function()
     {
         function clearClasses(element) {
@@ -199,6 +218,10 @@ WK.QueueDiagramView.prototype = {
             element.classList.remove("selected-attempt");
             element.classList.remove("selected-through");
             element.classList.remove("selected-ignore");
+            element.classList.remove("empty-pass");
+            element.classList.remove("empty-fail");
+            element.classList.remove("empty-abort");
+            element.classList.remove("empty-attempt");
         }
 
         clearClasses(this._startElement);
